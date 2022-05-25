@@ -9,8 +9,8 @@ export default function Home() {
       <Head>
         <title>TypeScript starter for Next.js</title>
         <meta
-          name="description"
-          content="TypeScript starter for Next.js that includes all you need to build amazing apps"
+          name="Unite DAO - Schema manager"
+          content="Dapp to manage schemas in UniteDAO"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
