@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import Image from 'next/image';
-
 import styles from '@/styles/Home.module.css';
+import { useWalletContext } from '../context/wallet';
 
 export default function Home() {
+  const { address } = useWalletContext();
   return (
     <div className={styles.container}>
       <Head>
@@ -20,10 +21,7 @@ export default function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className={styles.description}>
-          Get started by editing{` `}
-          <code className={styles.code}>src/pages/index.tsx</code>
-        </p>
+        <p className={styles.description}>Wallet Address is {address}</p>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>

@@ -3,11 +3,12 @@ import { useColorModeValue, useBreakpointValue } from '@chakra-ui/react';
 import { Text, Button, InputGroup, Input } from '@chakra-ui/react';
 import { useWalletContext } from '../context/wallet';
 import { Flex, Box, Stack, Badge } from '@chakra-ui/react';
-import { Stat, StatLabel, StatHelpText } from '@chakra-ui/react';
+import { Stat, StatLabel, StatHelpText, StatNumber } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent } from '@chakra-ui/react';
 import { ModalHeader, ModalBody, ModalFooter } from '@chakra-ui/react';
 import { ModalCloseButton } from '@chakra-ui/react';
+import { JWKInterface } from '@unitedao/unite';
 
 const UserType = (props: any) => {
   const { role } = props;
@@ -39,10 +40,11 @@ const UserType = (props: any) => {
 };
 
 const Navbar = () => {
-  const { unite } = useWalletContext();
+  const { unite, saveWallet } = useWalletContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSelected, setIsSelected] = useState(false);
   const [address, setAddress] = useState(``);
+  const [balance, setBalance] = useState(0);
   const [role, setRole] = useState(`editor`);
 
   const handleNewFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,11 +54,13 @@ const Navbar = () => {
     fileReader.readAsText(file, `UTF-8`);
     fileReader.onload = async (readerEvt: any) => {
       setIsSelected(true);
-      const wallet = JSON.parse(readerEvt.target);
+      const wallet = JSON.parse(readerEvt.currentTarget.result);
       const addr: string = await unite.arweave.wallets.getAddress(wallet);
       setAddress(addr);
-      // const balance = await arweave.wallets.getBalance(addr)
-      // const ar = await arweave.ar.winstonToAr(balance);
+      const balance = await unite.arweave.wallets.getBalance(addr);
+      const ar = await unite.arweave.ar.winstonToAr(balance);
+      setBalance(parseFloat(ar));
+      saveWallet(wallet as JWKInterface);
       // let contributor = contributors.find(e => e.address === addr);
       // if (contributor) setAvatar(contributor.img);
       // else contributor = { address: addr, role: 'none'}
@@ -123,7 +127,7 @@ const Navbar = () => {
                 <div>
                   <Stat>
                     <StatLabel>Wallet</StatLabel>
-                    {/* <StatNumber>{balance} AR</StatNumber> */}
+                    <StatNumber>{balance} AR</StatNumber>
                     <StatHelpText fontSize="xs">{address}</StatHelpText>
                   </Stat>
                   <UserType role={role} />
