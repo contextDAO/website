@@ -12,17 +12,23 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [wallet, setWallet] = useState<JWKInterface>({} as JWKInterface);
   const [address, setAddress] = useState(``);
   const [unite, setUnite] = useState<Unite>({} as Unite);
+  const [jsonSchema, setSchema] = useState({} as object);
   const [standard, setSetandard] = useState<Standard>({} as Standard);
+  const [standardState, setSetandardState] = useState<UniteSchemaState>(
+    {} as UniteSchemaState,
+  );
 
   const initContract = async () => {
     const u = await Unite.init(`localhost`);
     setUnite(u);
     const standard = await u.getStandard(
-      `ez03Q7RHIRUpc80gVW2IB4xEJ8PsRljLuAex2aLoSIM`,
+      `PHjWqQ8vSgDbkf07mlToUtkW2FLWBM50pfzV2NzZsV0`,
     );
-    const state: UniteSchemaState = await standard.readState();
+    const standardState: UniteSchemaState = await standard.readState();
     setSetandard(standard);
-    console.log(state);
+    setSetandardState(standardState);
+    const json = await standard.getSchema();
+    setSchema(json);
   };
 
   useEffect(() => {
@@ -39,7 +45,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
       <WalletContext.Provider
-        value={{ unite, wallet, address, standard, saveWallet }}
+        value={{
+          unite,
+          wallet,
+          address,
+          standard,
+          standardState,
+          jsonSchema,
+          saveWallet,
+        }}
       >
         <Layout>
           <Component {...pageProps} />;

@@ -57,9 +57,9 @@ const Navbar = () => {
       const wallet = JSON.parse(readerEvt.currentTarget.result);
       const addr: string = await unite.arweave.wallets.getAddress(wallet);
       setAddress(addr);
-      const balance = await unite.arweave.wallets.getBalance(addr);
-      const ar = await unite.arweave.ar.winstonToAr(balance);
-      setBalance(parseFloat(ar));
+      // const balance = await unite.arweave.wallets.getBalance(addr);
+      // const ar = await unite.arweave.ar.winstonToAr(balance);
+      // setBalance(parseFloat(ar));
       saveWallet(wallet as JWKInterface);
       // let contributor = contributors.find(e => e.address === addr);
       // if (contributor) setAvatar(contributor.img);
@@ -73,8 +73,8 @@ const Navbar = () => {
   return (
     <Box>
       <Flex
-        bg={useColorModeValue(`white`, `gray.800`)}
-        color={useColorModeValue(`gray.600`, `white`)}
+        bg="#24292F"
+        color="#FFF"
         minH={`60px`}
         py={{ base: 2 }}
         px={{ base: 4 }}

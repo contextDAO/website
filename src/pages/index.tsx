@@ -4,11 +4,10 @@ import styles from '@/styles/Home.module.css';
 import { useWalletContext } from '../context/wallet';
 
 export default function Home() {
-  const { address } = useWalletContext();
   return (
     <div className={styles.container}>
       <Head>
-        <title>TypeScript starter for Next.js</title>
+        <title>Unite DAO - Schemas Dapp</title>
         <meta
           name="Unite DAO - Schema manager"
           content="Dapp to manage schemas in UniteDAO"
@@ -20,8 +19,6 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
-        <p className={styles.description}>Wallet Address is {address}</p>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
