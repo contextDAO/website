@@ -1,8 +1,7 @@
-import { Text } from '@chakra-ui/react';
-import { useWalletContext } from '../context/wallet';
+import { useDappContext } from '../context/dapp';
 
 const Schema = () => {
-  const { jsonSchema } = useWalletContext();
+  const { jsonSchema } = useDappContext();
   return (
     <div>
       <pre>{JSON.stringify(jsonSchema, null, 2)}</pre>

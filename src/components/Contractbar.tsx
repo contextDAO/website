@@ -3,12 +3,12 @@ import { useBreakpointValue } from '@chakra-ui/react';
 import { Text } from '@chakra-ui/react';
 import { Tabs, Tab, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import { Box, VStack } from '@chakra-ui/react';
-import { useWalletContext } from '../context/wallet';
+import { useDappContext } from '../context/dapp';
 import Schema from './Schema';
 import Contributors from './Contributors';
 
 const Contractbar = () => {
-  const { standardState } = useWalletContext();
+  const { standardState } = useDappContext();
   return (
     <Box>
       <Tabs w="100%">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useColorModeValue, useBreakpointValue } from '@chakra-ui/react';
 import { Text, Button, InputGroup, Input } from '@chakra-ui/react';
-import { useWalletContext } from '../context/wallet';
+import { useDappContext } from '../context/dapp';
 import { Flex, Box, Stack, Badge } from '@chakra-ui/react';
 import { Stat, StatLabel, StatHelpText, StatNumber } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
@@ -40,12 +40,11 @@ const UserType = (props: any) => {
 };
 
 const Navbar = () => {
-  const { unite, saveWallet } = useWalletContext();
+  const { unite, saveWallet } = useDappContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSelected, setIsSelected] = useState(false);
   const [address, setAddress] = useState(``);
   const [balance, setBalance] = useState(0);
-  const [role, setRole] = useState(`editor`);
 
   const handleNewFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileReader = new FileReader();
@@ -61,7 +60,6 @@ const Navbar = () => {
       // const ar = await unite.arweave.ar.winstonToAr(balance);
       // setBalance(parseFloat(ar));
       saveWallet(wallet as JWKInterface);
-      // let contributor = contributors.find(e => e.address === addr);
       // if (contributor) setAvatar(contributor.img);
       // else contributor = { address: addr, role: 'none'}
       // contributor.wallet = wallet;

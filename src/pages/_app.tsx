@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import Layout from '../components/Layout';
-import { WalletContext } from '../context/wallet';
+import { DappContext, User, getUser, getContributors } from '../context/dapp';
 import { Unite, Standard } from '@unitedao/unite';
 import { JWKInterface, UniteSchemaState } from '@unitedao/unite';
 
 import '@/styles/global.css';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [wallet, setWallet] = useState<JWKInterface>({} as JWKInterface);
-  const [address, setAddress] = useState(``);
-  const [unite, setUnite] = useState<Unite>({} as Unite);
+  const [unite, setUnite] = useState({} as Unite);
+  const [user, setUser] = useState({} as User);
+  const [contributors, setContributors] = useState([] as User[]);
   const [jsonSchema, setSchema] = useState({} as object);
   const [standard, setSetandard] = useState<Standard>({} as Standard);
   const [standardState, setSetandardState] = useState<UniteSchemaState>(
@@ -29,6 +29,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     setSetandardState(standardState);
     const json = await standard.getSchema();
     setSchema(json);
+    const contributors = await getContributors(standardState);
+    setContributors(contributors);
   };
 
   useEffect(() => {
@@ -36,19 +38,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   const saveWallet = async (wallet: JWKInterface) => {
-    setWallet(wallet);
     standard.connect(wallet);
-    const addr = await unite.getAddress(wallet);
-    setAddress(addr);
+    const user = await getUser(wallet, unite, standardState);
+    setUser(user);
   };
 
   return (
     <ChakraProvider>
-      <WalletContext.Provider
+      <DappContext.Provider
         value={{
           unite,
-          wallet,
-          address,
+          user,
+          contributors,
           standard,
           standardState,
           jsonSchema,
@@ -58,7 +59,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Layout>
           <Component {...pageProps} />;
         </Layout>
-      </WalletContext.Provider>
+      </DappContext.Provider>
     </ChakraProvider>
   );
 }
