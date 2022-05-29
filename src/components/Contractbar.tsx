@@ -5,6 +5,7 @@ import { Tabs, Tab, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import { Box, VStack } from '@chakra-ui/react';
 import { useWalletContext } from '../context/wallet';
 import Schema from './Schema';
+import Contributors from './Contributors';
 
 const Contractbar = () => {
   const { standardState } = useWalletContext();
@@ -39,6 +40,9 @@ const Contractbar = () => {
               </TabPanel>
               <TabPanel>
                 <p>three!</p>
+              </TabPanel>
+              <TabPanel>
+                <Contributors />
               </TabPanel>
             </TabPanels>
           </Box>
