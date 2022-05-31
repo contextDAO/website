@@ -6,6 +6,7 @@ import { Box, VStack, Stack } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 import Schema from './Schema';
 import Contributors from './Contributors';
+import Proposals from './Proposals';
 import About from './About';
 
 const Contractbar = () => {
@@ -33,23 +34,23 @@ const Contractbar = () => {
         <Box my={10} mx="auto" maxW="1200px" w={`100%`}>
           <Stack spacing={8} direction="row">
             <Box w="70%" border="1px" borderColor="gray.200">
-              <TabPanels>
+              <TabPanels m={0}>
                 <TabPanel>
                   <Schema />
                 </TabPanel>
-                <TabPanel>
+                <TabPanel p={0}>
                   <p>two!</p>
                 </TabPanel>
-                <TabPanel>
-                  <p>three!</p>
+                <TabPanel p={0}>
+                  <Proposals />
                 </TabPanel>
-                <TabPanel>
+                <TabPanel p={0}>
                   <Contributors />
                 </TabPanel>
               </TabPanels>
             </Box>
             <Box w="30%">
-              <About role="" />
+              <About />
             </Box>
           </Stack>
         </Box>

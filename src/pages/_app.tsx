@@ -7,6 +7,9 @@ import { Unite, Standard } from '@unitedao/unite';
 import { JWKInterface, UniteSchemaState } from '@unitedao/unite';
 
 import '@/styles/global.css';
+import '@fontsource/raleway/400.css';
+import '@fontsource/open-sans/700.css';
+import theme from './theme';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [unite, setUnite] = useState({} as Unite);
@@ -57,7 +60,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   };
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <DappContext.Provider
         value={{
           unite,

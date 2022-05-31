@@ -76,18 +76,22 @@ const Contributors = () => {
 
   return (
     <div>
+      <Box
+        backgroundColor="#F6F8FA"
+        p={4}
+        mb={3}
+        borderBottom="1px"
+        borderColor="gray.200"
+      >
+        Contributors
+      </Box>
       {contributors.map((contributor: Contributor, index: number) => (
         <HStack
           key={index}
           spacing="24px"
-          m={2}
+          borderBottom="1px"
+          borderColor="gray.200"
           p={3}
-          backgroundColor="white"
-          border="1px"
-          rounded="lg"
-          borderColor={
-            user.address === contributor.address ? `gray.600` : `gray.200`
-          }
         >
           <Avatar indexOfContributor={index} />
           <Text fontSize="xs">{contributor.address}</Text>
