@@ -21,7 +21,7 @@ const getColor = (role: string): string => {
 const Role = (props: Props) => {
   const { role } = props;
   return (
-    <Badge ml={5} colorScheme={getColor(role)}>
+    <Badge mx={`auto`} colorScheme={getColor(role)} variant="outline">
       {role}
     </Badge>
   );

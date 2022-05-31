@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useColorModeValue, useBreakpointValue } from '@chakra-ui/react';
 import { Text, Button, InputGroup, Input } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
-import { Flex, Box, Stack, Badge } from '@chakra-ui/react';
+import { Flex, Box, Stack } from '@chakra-ui/react';
 import { Stat, StatLabel, StatHelpText, StatNumber } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent } from '@chakra-ui/react';
