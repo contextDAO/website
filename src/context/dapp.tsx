@@ -11,7 +11,6 @@ export type User = {
   address: string;
   role: string;
   img: string;
-  color: string;
 };
 
 export type DappContent = {
@@ -22,6 +21,7 @@ export type DappContent = {
   standardState: UniteSchemaState;
   jsonSchema: object;
   saveWallet: (wallet: JWKInterface) => void;
+  initStandard: (contractAddr: string, u?: Unite) => void;
 };
 
 export const DappContext = createContext<DappContent>({
@@ -32,22 +32,8 @@ export const DappContext = createContext<DappContent>({
   standardState: {} as UniteSchemaState,
   jsonSchema: {},
   saveWallet: () => {},
+  initStandard: () => {},
 });
-
-const getColor = (role: string): string => {
-  let color = `gray`;
-  switch (role) {
-    case `editor`:
-      color = `green`;
-      break;
-    case `contributor`:
-      color = `blue`;
-      break;
-    default:
-      break;
-  }
-  return color;
-};
 
 export const getUser = async (
   wallet: JWKInterface,
@@ -64,7 +50,6 @@ export const getUser = async (
     address,
     role,
     img: ``,
-    color: getColor(role),
   };
   return user;
 };
@@ -78,7 +63,6 @@ export const getContributors = async (
       wallet: {} as JWKInterface,
       address: c.address,
       role: c.role,
-      color: ``,
       img: ``,
     };
     contributors.push(contributor);

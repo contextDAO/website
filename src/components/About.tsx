@@ -3,7 +3,6 @@ import { useDappContext } from '../context/dapp';
 
 const About = () => {
   const { standardState } = useDappContext();
-  console.log(standardState);
   return (
     <Box>
       <Heading as="h2" size="md">
@@ -15,7 +14,7 @@ const About = () => {
         Releases
       </Heading>
       <Text size="xs" color="gray.600">
-        {standardState.versions.length} releases
+        {standardState.versions?.length} releases
       </Text>
       <Text mt="16px">
         current version :&nbsp;
@@ -28,7 +27,7 @@ const About = () => {
         Proposals
       </Heading>
       <Text size="xs" color="gray.600">
-        {standardState.proposals.length} proposals
+        {standardState.proposals?.length} proposals
       </Text>
     </Box>
   );

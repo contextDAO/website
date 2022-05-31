@@ -18,12 +18,13 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     {} as UniteSchemaState,
   );
 
-  const initContract = async () => {
-    const u = await Unite.init(`localhost`);
-    setUnite(u);
-    const standard = await u.getStandard(
-      `07OiHbuT_gikSy3ey0CNHQSKqaqkXxRJVXYmYLqT6xU`,
-    );
+  const initStandard = async (contractAddr: string, u?: Unite) => {
+    let standard;
+    if (u) {
+      standard = await u.getStandard(contractAddr);
+    } else {
+      standard = await unite.getStandard(contractAddr);
+    }
     const standardState: UniteSchemaState = await standard.readState();
     setSetandard(standard);
     setSetandardState(standardState);
@@ -31,6 +32,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     setSchema(json);
     const contributors = await getContributors(standardState);
     setContributors(contributors);
+
+    console.log(user);
+    if (user.wallet) {
+      const reloadUser = await getUser(user.wallet, unite, standardState);
+      setUser(reloadUser);
+    }
+  };
+
+  const initContract = async () => {
+    const u = await Unite.init(`localhost`);
+    setUnite(u);
+    await initStandard(`rG8uyFc6z0nBpshIZUtPFmhqW0Cf2ko5U8RVl-z4v4k`, u);
   };
 
   useEffect(() => {
@@ -54,6 +67,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           standardState,
           jsonSchema,
           saveWallet,
+          initStandard,
         }}
       >
         <Layout>
