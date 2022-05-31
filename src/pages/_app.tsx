@@ -22,7 +22,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     const u = await Unite.init(`localhost`);
     setUnite(u);
     const standard = await u.getStandard(
-      `sajQ15IySFZ2kNG2ou6-n0sXg14cizfCPizPRczRKsY`,
+      `07OiHbuT_gikSy3ey0CNHQSKqaqkXxRJVXYmYLqT6xU`,
     );
     const standardState: UniteSchemaState = await standard.readState();
     setSetandard(standard);

@@ -13,10 +13,7 @@ const Contributors = () => {
   const { standard, contributors, user } = useDappContext();
 
   const handleIncorporateDapp = async () => {
-    console.log(user.wallet);
-    console.log(standard);
     await standard.register(user.wallet);
-    console.log(`handle`);
   };
 
   const openChangeRole = (addr: string) => {
