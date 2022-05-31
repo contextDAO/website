@@ -34,6 +34,21 @@ export const DappContext = createContext<DappContent>({
   saveWallet: () => {},
 });
 
+const getColor = (role: string): string => {
+  let color = `gray`;
+  switch (role) {
+    case `editor`:
+      color = `green`;
+      break;
+    case `contributor`:
+      color = `blue`;
+      break;
+    default:
+      break;
+  }
+  return color;
+};
+
 export const getUser = async (
   wallet: JWKInterface,
   unite: Unite,
@@ -49,7 +64,7 @@ export const getUser = async (
     address,
     role,
     img: ``,
-    color: ``,
+    color: getColor(role),
   };
   return user;
 };

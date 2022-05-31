@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Text, Link, Box, HStack, Image, Spacer } from '@chakra-ui/react';
+import { Text, Button, Box, HStack, Spacer } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
+import Avatar from './Avatar';
+import Role from './Role';
 
 interface Contributor {
   address: string;
@@ -9,13 +10,17 @@ interface Contributor {
 }
 
 const Contributors = () => {
-  const { contributors, user } = useDappContext();
-  const openChangeRole = (addr: string) => {
-    console.log(addr);
+  const { standard, contributors, user } = useDappContext();
+
+  const handleIncorporateDapp = async () => {
+    console.log(user.wallet);
+    console.log(standard);
+    await standard.register(user.wallet);
+    console.log(`handle`);
   };
 
-  const getColor = (role: string): string => {
-    return `#00FF00`;
+  const openChangeRole = (addr: string) => {
+    console.log(addr);
   };
 
   return (
@@ -31,7 +36,7 @@ const Contributors = () => {
           borderColor="gray.200"
           rounded="lg"
         >
-          {/* <Image src={contributor.img} style={{ width: '32px' }} /> */}
+          <Avatar indexOfContributor={index} />
           <Text fontSize="xs">{contributor.address}</Text>
           <Spacer />
           <Box w={100}>
@@ -40,13 +45,29 @@ const Contributors = () => {
                 <b>You</b>
               </Text>
             )}
-            <Text fontSize="xs" color={getColor(contributor.role)}>
-              {contributor.role}
-            </Text>
-            {/* contributor.role === `editor` && contributor.role !== `editor` && (<Link onClick={() => openChangeRole(user.address)} fontSize="xs">change</Link>) */}
+            <Role role={contributor.role} />
+            {user.role === `editor` && contributor.role !== `editor` && (
+              <Button
+                onClick={() => openChangeRole(user.address)}
+                fontSize="xs"
+              >
+                change
+              </Button>
+            )}
           </Box>
         </HStack>
       ))}
+      {user.role === `none` && (
+        <Box>
+          <Button
+            colorScheme="teal"
+            variant="outline"
+            onClick={handleIncorporateDapp}
+          >
+            Join this Dapp
+          </Button>
+        </Box>
+      )}
     </div>
   );
 };
