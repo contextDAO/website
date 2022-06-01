@@ -36,8 +36,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     const contributors = await getContributors(standardState);
     setContributors(contributors);
 
-    console.log(user);
     if (user.wallet) {
+      standard.connect(user.wallet);
       const reloadUser = await getUser(user.wallet, unite, standardState);
       setUser(reloadUser);
     }
@@ -46,7 +46,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const initContract = async () => {
     const u = await Unite.init(`localhost`);
     setUnite(u);
-    await initStandard(`rG8uyFc6z0nBpshIZUtPFmhqW0Cf2ko5U8RVl-z4v4k`, u);
+    await initStandard(`KWO35UiRfzOC6lTbvo7nGLqeXXWsc3h84rd_Qmx7ZNE`, u);
   };
 
   useEffect(() => {

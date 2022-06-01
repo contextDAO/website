@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from 'react';
 import { Text, Button, Box, HStack, Spacer } from '@chakra-ui/react';
 import { Heading, Input, ButtonGroup } from '@chakra-ui/react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
-import { AddIcon, CloseIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import { useToast, Stack, Checkbox } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 import Status from './Status';
@@ -22,9 +21,7 @@ const Proposals = () => {
     useDappContext();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [action, setAction] = useState(`list`);
-  const [index, setIndex] = useState(-1);
-  const [proposal, setProposal] = useState();
+  const [addProposal, setAddProposal] = useState(false);
   const [formProposal, setFormProposal] = useState<FormProposal>(
     {} as FormProposal,
   );
@@ -46,12 +43,6 @@ const Proposals = () => {
       ...formProposal,
       [evt.currentTarget.name]: value,
     });
-  };
-
-  const detailsProposal = (index: number) => {
-    setIndex(index);
-    setProposal(standardState.proposals[index]);
-    setAction(`details`);
   };
 
   const handleAddProposal = async () => {
@@ -86,7 +77,6 @@ const Proposals = () => {
       formProposal.isRequired,
     );
     await unite.mine();
-    await unite.mine();
     toast({
       title: `Proposal added`,
       description: `A new proposal has been added to the contract`,
@@ -94,9 +84,8 @@ const Proposals = () => {
       duration: 4000,
       isClosable: true,
     });
-    initStandard(standard.contractAddr);
     setIsLoading(false);
-    setAction(`list`);
+    initStandard(standard.contractAddr);
   };
 
   return (
@@ -108,62 +97,44 @@ const Proposals = () => {
         borderBottom="1px"
         borderColor="gray.200"
       >
-        <HStack>
-          <Text>Proposals</Text>
-          <Spacer />
-          <Box>
-            {action !== `add` &&
-              user.role &&
-              [`editor`, `contributor`].includes(user.role) && (
-                <Button size="xs" w={5} h={5} onClick={() => setAction(`add`)}>
-                  <AddIcon />
-                </Button>
-              )}
-            {action !== `list` && (
-              <Button size="xs" w={5} h={5} onClick={() => setAction(`list`)}>
-                <CloseIcon />
-              </Button>
-            )}
-          </Box>
-        </HStack>
+        Proposals
       </Box>
       {standardState.proposals?.length === 0 && (
         <Text m={12}>No Proposals</Text>
       )}
-      {action === `list` &&
-        standardState.proposals?.map((proposal: any, index: number) => (
-          <HStack
-            key={index}
-            spacing="24px"
-            borderBottom="1px"
-            borderColor="gray.200"
-            p={3}
+      {standardState.proposals?.map((proposal: any, index: number) => (
+        <HStack
+          key={index}
+          spacing="24px"
+          borderBottom="1px"
+          borderColor="gray.200"
+          p={3}
+        >
+          <Box pl={6}>
+            <Text>{proposal.name}</Text>
+            <Text fontSize="xs">{proposal.comments.length} comments</Text>
+          </Box>
+          <Spacer />
+          <Box>
+            <Status status={proposal.status} />
+          </Box>
+        </HStack>
+      ))}
+      {addProposal === false && user.role && user.role !== `none` && (
+        <Box p={10}>
+          <Button
+            isLoading={isLoading}
+            colorScheme="teal"
+            variant="outline"
+            onClick={() => {
+              setAddProposal(true);
+            }}
           >
-            <Box pl={6}>
-              <Text>{proposal.name}</Text>
-              <Text fontSize="xs">{proposal.comments.length} comments</Text>
-            </Box>
-            <Spacer />
-            <Box>
-              <Status status={proposal.status} />
-              <Button
-                size="xs"
-                ml={3}
-                w={6}
-                h={6}
-                onClick={() => detailsProposal(index)}
-              >
-                <InfoOutlineIcon />
-              </Button>
-            </Box>
-          </HStack>
-        ))}
-      {action === `details` && (
-        <Box>
-          <Heading>Hello</Heading>
+            Add a Proposal
+          </Button>
         </Box>
       )}
-      {action === `add` && (
+      {addProposal === true && (
         <Box p={10}>
           <Heading as="h2" size="sm">
             Proposal
@@ -254,7 +225,7 @@ const Proposals = () => {
             </Button>
             <Button
               onClick={() => {
-                setAction(`list`);
+                setAddProposal(false);
               }}
             >
               Cancel

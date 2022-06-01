@@ -8,6 +8,7 @@ import Schema from './Schema';
 import Contributors from './Contributors';
 import Proposals from './Proposals';
 import About from './About';
+import Versions from './Versions';
 
 const Contractbar = () => {
   const { standardState } = useDappContext();
@@ -39,7 +40,7 @@ const Contractbar = () => {
                   <Schema />
                 </TabPanel>
                 <TabPanel p={0}>
-                  <p>two!</p>
+                  <Versions />
                 </TabPanel>
                 <TabPanel p={0}>
                   <Proposals />
