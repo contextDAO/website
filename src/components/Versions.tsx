@@ -4,7 +4,7 @@ import { useDappContext } from '../context/dapp';
 
 const Versions = () => {
   const { standardState, user } = useDappContext();
-
+  console.log(standardState.versions);
   return (
     <div>
       <Box
@@ -16,6 +16,7 @@ const Versions = () => {
       >
         Versions
       </Box>
+      {standardState.versions?.length === 0 && <Text m={12}>No Versions</Text>}
       {standardState.versions?.map((version: any, index: number) => (
         <HStack
           key={index}
@@ -24,9 +25,16 @@ const Versions = () => {
           borderColor="gray.200"
           p={3}
         >
-          <Text fontSize="xs">{version.version}</Text>
+          <Text fontSize="xs">#{index}</Text>
+          <Text>
+            <b>{version.version}</b>
+          </Text>
           <Spacer />
-          <Box w={50}>Version</Box>
+          <Text fontSize="xs">
+            Proposal #{version.proposalId}
+            <br />
+            {standardState.proposals[version.proposalId].name}
+          </Text>
         </HStack>
       ))}
     </div>

@@ -128,16 +128,13 @@ const Contributors = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add contributor</ModalHeader>
+          <ModalHeader>Edit Role</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {address}
+            <Text fontSize="xs">{address}</Text>
             <FormControl isInvalid={isError}>
-              <FormLabel htmlFor="contributor">Contributor</FormLabel>
-              <Select
-                placeholder="Select option"
-                onChange={(e) => handleChange(e)}
-              >
+              <FormLabel htmlFor="contributor">Role</FormLabel>
+              <Select onChange={(e) => handleChange(e)}>
                 <option value="editor">Editor</option>
                 <option value="contributor">Contributor</option>
                 <option value="user">User</option>

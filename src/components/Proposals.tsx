@@ -1,11 +1,13 @@
-import { ChangeEvent, useState } from 'react';
-import { Text, Button, Box, HStack, Spacer } from '@chakra-ui/react';
-import { Heading, Input, ButtonGroup } from '@chakra-ui/react';
+import { ChangeEvent, useState, useRef } from 'react';
+import { Proposal, ProposalStatus, Field, FieldType } from '@unitedao/unite';
+import { Text, Box, HStack, Spacer } from '@chakra-ui/react';
+import { Heading, Input, Button, ButtonGroup } from '@chakra-ui/react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import { useToast, Stack, Checkbox } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 import Status from './Status';
+import FieldDetails from './FieldDetails';
 
 interface FormProposal {
   proposalName: string;
@@ -13,8 +15,8 @@ interface FormProposal {
   fieldName: string;
   description: string;
   type: 'text' | 'number' | 'boolean' | 'select';
-  isReadOnly: boolean;
-  isRequired: boolean;
+  readOnly: boolean;
+  required: boolean;
 }
 
 const Proposals = () => {
@@ -24,11 +26,13 @@ const Proposals = () => {
   const [isError, setIsError] = useState(false);
   const [action, setAction] = useState(`list`);
   const [index, setIndex] = useState(-1);
-  const [proposal, setProposal] = useState();
+  const [proposal, setProposal] = useState<Proposal>({} as Proposal);
   const [formProposal, setFormProposal] = useState<FormProposal>(
     {} as FormProposal,
   );
   const toast = useToast();
+  const ver = useRef();
+
   const handleChange = (
     evt: ChangeEvent<{
       value: string | boolean;
@@ -36,12 +40,11 @@ const Proposals = () => {
       checked: boolean;
     }>,
   ) => {
-    const value: string | boolean = [`isReadOnly`, `isRequired`].includes(
+    const value: string | boolean = [`readOnly`, `required`].includes(
       evt.currentTarget.name,
     )
       ? evt.currentTarget.checked
       : evt.currentTarget.value;
-    console.log(evt.currentTarget.value);
     setFormProposal({
       ...formProposal,
       [evt.currentTarget.name]: value,
@@ -52,6 +55,22 @@ const Proposals = () => {
     setIndex(index);
     setProposal(standardState.proposals[index]);
     setAction(`details`);
+  };
+
+  const updateStatus = async (status: ProposalStatus) => {
+    const version =
+      ver.current?.value && status === `approved` ? ver.current?.value : ``;
+    await standard.updateProposal(index, status, version);
+    await unite.mine();
+    toast({
+      title: `Proposal status updated`,
+      description: `Proposal #${index} has now the status: ${status}`,
+      status: `success`,
+      duration: 4000,
+      isClosable: true,
+    });
+    standardState.proposals[index].status = status;
+    initStandard(standard.contractAddr);
   };
 
   const handleAddProposal = async () => {
@@ -79,13 +98,14 @@ const Proposals = () => {
     await standard.addProposal(
       formProposal.proposalName,
       formProposal.comment,
-      formProposal.fieldName,
-      formProposal.description,
-      formProposal.type,
-      formProposal.isReadOnly,
-      formProposal.isRequired,
+      {
+        name: formProposal.fieldName,
+        description: formProposal.description,
+        type: formProposal.type,
+        readOnly: formProposal.readOnly,
+        required: formProposal.required,
+      } as Field,
     );
-    await unite.mine();
     await unite.mine();
     toast({
       title: `Proposal added`,
@@ -112,7 +132,7 @@ const Proposals = () => {
           <Text>Proposals</Text>
           <Spacer />
           <Box>
-            {action !== `add` &&
+            {action === `list` &&
               user.role &&
               [`editor`, `contributor`].includes(user.role) && (
                 <Button size="xs" w={5} h={5} onClick={() => setAction(`add`)}>
@@ -158,9 +178,56 @@ const Proposals = () => {
             </Box>
           </HStack>
         ))}
-      {action === `details` && (
-        <Box>
-          <Heading>Hello</Heading>
+      {action === `details` && proposal && (
+        <Box p="10">
+          <Box mb={3}>
+            <Heading as="h2" size="md">
+              {proposal.name}
+            </Heading>
+            <Status status={proposal.status} />
+          </Box>
+          <FieldDetails field={proposal.field} />
+          {[`editor`, `contributor`].includes(user.role) && (
+            <Box my={3}>
+              <Heading as="h2" size="md" mb={3}>
+                Actions
+              </Heading>
+              <HStack>
+                {proposal.status === `open` && (
+                  <Select fontSize="xs" h={6} w={32} ref={ver}>
+                    <option>patch</option>
+                    <option>minor</option>
+                    <option>major</option>
+                  </Select>
+                )}
+                {proposal.status === `proposal` && (
+                  <Button
+                    size="xs"
+                    colorScheme="blue"
+                    onClick={() => updateStatus(`open`)}
+                  >
+                    Open
+                  </Button>
+                )}
+                {proposal.status === `open` && (
+                  <Button
+                    size="xs"
+                    colorScheme="green"
+                    onClick={() => updateStatus(`approved`)}
+                  >
+                    Approve
+                  </Button>
+                )}
+                <Button
+                  size="xs"
+                  colorScheme="red"
+                  onClick={() => updateStatus(`abandoned`)}
+                >
+                  Abandon
+                </Button>
+              </HStack>
+            </Box>
+          )}
         </Box>
       )}
       {action === `add` && (
@@ -208,22 +275,18 @@ const Proposals = () => {
           <FormLabel mt={4} fontSize="sm" htmlFor="type">
             Type
           </FormLabel>
-          <Select
-            placeholder="Select Type"
-            name="type"
-            onChange={(e) => handleChange(e)}
-          >
-            <option value="text">Text</option>
-            <option value="numeric">Numeric</option>
+          <Select placeholder="Select Type" name="type" onChange={handleChange}>
+            <option value="string">String</option>
+            <option value="integer">Integer</option>
+            <option value="number">Number</option>
             <option value="boolean">Boolean</option>
-            <option value="select">Select</option>
           </Select>
           <FormLabel mt={4} fontSize="sm" htmlFor="type">
             Characteristics
           </FormLabel>
           <Stack spacing={[1, 5]} direction={[`column`, `row`]}>
             <Checkbox
-              name="isReadOnly"
+              name="readOnly"
               size="sm"
               colorScheme="green"
               onChange={handleChange}
@@ -231,7 +294,7 @@ const Proposals = () => {
               ReadOnly
             </Checkbox>
             <Checkbox
-              name="isRequired"
+              name="required"
               size="sm"
               colorScheme="green"
               onChange={handleChange}

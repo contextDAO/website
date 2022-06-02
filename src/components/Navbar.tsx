@@ -10,6 +10,7 @@ import { ModalHeader, ModalBody, ModalFooter } from '@chakra-ui/react';
 import { ModalCloseButton } from '@chakra-ui/react';
 import { JWKInterface } from '@unitedao/unite';
 import Role from './Role';
+import Avatar from './Avatar';
 
 const Navbar = () => {
   const { unite, saveWallet, user } = useDappContext();
@@ -66,7 +67,9 @@ const Navbar = () => {
               Connect Wallet
             </Button>
           ) : (
-            <Text>{user.address}</Text>
+            <Box>
+              <Role role={user.role} />
+            </Box>
           )}
         </Stack>
       </Flex>

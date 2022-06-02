@@ -1435,10 +1435,10 @@
   "resolved" "https://registry.npmjs.org/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz"
   "version" "1.1.2"
 
-"@unitedao/unite@1.0.13":
-  "integrity" "sha512-TPIR1fw/XszW1G0ikX2bvWQbgjTpLj8l0U8SJzIfFJbb9zXouqsuOiCAdaD8z3ymYtX4pUP1b2LCKpccyQZ6Kw=="
-  "resolved" "https://registry.npmjs.org/@unitedao/unite/-/unite-1.0.13.tgz"
-  "version" "1.0.13"
+"@unitedao/unite@1.0.15":
+  "integrity" "sha512-eYwo5QOb9XnqGAMMOblFasjx2M+0QO1NksJfHZ+Ue2ViU5PELmgzV71D1fdvI3Vb/Fc2wU/CkNckCj0TsMqC6A=="
+  "resolved" "https://registry.npmjs.org/@unitedao/unite/-/unite-1.0.15.tgz"
+  "version" "1.0.15"
   dependencies:
     "arweave" "^1.10.23"
     "redstone-smartweave" "^0.5.7"
