@@ -18,6 +18,7 @@ export type DappContent = {
   user: User;
   contributors: Array<User>;
   standard: Standard;
+  standardName: string;
   standardState: UniteSchemaState;
   jsonSchema: object;
   saveWallet: (wallet: JWKInterface) => void;
@@ -29,6 +30,7 @@ export const DappContext = createContext<DappContent>({
   user: {} as User,
   contributors: [] as User[],
   standard: {} as Standard,
+  standardName: ``,
   standardState: {} as UniteSchemaState,
   jsonSchema: {},
   saveWallet: () => {},

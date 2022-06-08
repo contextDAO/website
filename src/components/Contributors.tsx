@@ -17,7 +17,7 @@ interface Contributor {
 }
 
 const Contributors = () => {
-  const { standard, contributors, user, unite, initStandard } =
+  const { standard, standardName, contributors, user, unite, initStandard } =
     useDappContext();
   const [address, setAddress] = useState(``);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +37,7 @@ const Contributors = () => {
       position: `bottom`,
     });
     setIsLoading(false);
-    initStandard(standard.contractAddr);
+    initStandard(standardName);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -67,7 +67,7 @@ const Contributors = () => {
         position: `bottom`,
       });
       setIsLoading(false);
-      initStandard(standard.contractAddr);
+      initStandard(standardName);
     } else {
       setShowErrorMsg(true);
       return;

@@ -24,7 +24,7 @@ function isField(field: Field | undefined): field is Field {
 }
 
 const Proposals = () => {
-  const { unite, standard, standardState, user, initStandard } =
+  const { unite, standard, standardName, standardState, user, initStandard } =
     useDappContext();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -74,7 +74,7 @@ const Proposals = () => {
       isClosable: true,
     });
     standardState.proposals[index].status = status;
-    initStandard(standard.contractAddr);
+    initStandard(standardName);
   };
 
   const handleAddProposal = async () => {
@@ -118,7 +118,7 @@ const Proposals = () => {
       duration: 4000,
       isClosable: true,
     });
-    initStandard(standard.contractAddr);
+    initStandard(standardName);
     setIsLoading(false);
     setAction(`list`);
   };

@@ -1,13 +1,24 @@
-import { Box, Text, Heading, Divider } from '@chakra-ui/react';
+import { useRef } from 'react';
+import { Box, Text, Heading, Divider, Select } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 
 const About = () => {
-  const { standardState } = useDappContext();
+  const { standardState, initStandard } = useDappContext();
+  const selectRef = useRef<HTMLSelectElement>(null);
+
+  const updateStandard = () => {
+    if (selectRef.current !== null) {
+      initStandard(selectRef.current.value);
+    }
+  };
+
   return (
     <Box>
-      <Heading as="h2" size="md">
-        {standardState.title}
-      </Heading>
+      <Select ref={selectRef} onChange={updateStandard}>
+        <option>@human</option>
+        <option>@organization</option>
+        <option>@collection</option>
+      </Select>
       <Text>{standardState.description}</Text>
       <Divider my="12px" />
       <Heading as="h2" size="md">

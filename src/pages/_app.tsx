@@ -11,17 +11,25 @@ import '@fontsource/raleway/400.css';
 import '@fontsource/open-sans/700.css';
 import theme from './theme';
 
+const standards: any = {
+  '@human': `DiPkHC9c0SCGsPOjjdJbUBt_AQObV5NLjkkY1umKa90`,
+  '@organization': `nBpOIWs__lUtu-nue6ht4yEQbATLrpLwCImUs-kEAus`,
+  '@collection': `G0FxYB22FeopSk6eOGw7e1L4w7A-G3WqH0yifquVi4s`,
+};
+
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [unite, setUnite] = useState({} as Unite);
   const [user, setUser] = useState({} as User);
   const [contributors, setContributors] = useState([] as User[]);
   const [jsonSchema, setSchema] = useState({} as object);
+  const [standardName, setSetandardName] = useState(``);
   const [standard, setSetandard] = useState<Standard>({} as Standard);
   const [standardState, setSetandardState] = useState<UniteSchemaState>(
     {} as UniteSchemaState,
   );
 
-  const initStandard = async (contractAddr: string, u?: Unite) => {
+  const initStandard = async (standardName: string, u?: Unite) => {
+    const contractAddr = standards[standardName];
     let standard;
     if (u) {
       standard = await u.getStandard(contractAddr);
@@ -30,6 +38,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }
     const standardState: UniteSchemaState = await standard.readState();
     setSetandard(standard);
+    setSetandardName(standardName);
     setSetandardState(standardState);
     const json = await standard.getSchema();
     setSchema(json);
@@ -46,7 +55,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const initContract = async () => {
     const u = await Unite.init(`localhost`);
     setUnite(u);
-    await initStandard(`RfdG90dEdRIBVTNIhb_Cel-u-tNl_4UNIS5y59wP72I`, u);
+    await initStandard(`@human`, u);
   };
 
   useEffect(() => {
@@ -67,6 +76,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           user,
           contributors,
           standard,
+          standardName,
           standardState,
           jsonSchema,
           saveWallet,
