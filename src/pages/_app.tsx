@@ -46,7 +46,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const initContract = async () => {
     const u = await Unite.init(`localhost`);
     setUnite(u);
-    await initStandard(`aBfiz9WI8EFIomccURQWXxIMvvjCrxBifq0OMDc6EZM`, u);
+    await initStandard(`RfdG90dEdRIBVTNIhb_Cel-u-tNl_4UNIS5y59wP72I`, u);
   };
 
   useEffect(() => {

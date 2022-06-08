@@ -33,7 +33,10 @@ const Versions = () => {
           <Text fontSize="xs">
             Proposal #{version.proposalId}
             <br />
-            {standardState.proposals[version.proposalId].name}
+            {standardState.proposals[version.proposalId].approvedDate &&
+              new Date(
+                standardState.proposals[version.proposalId].approvedDate,
+              ).toISOString()}
           </Text>
         </HStack>
       ))}

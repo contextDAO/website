@@ -19,6 +19,10 @@ interface FormProposal {
   required: boolean;
 }
 
+function isField(field: Field | undefined): field is Field {
+  return (field as Field).name !== undefined;
+}
+
 const Proposals = () => {
   const { unite, standard, standardState, user, initStandard } =
     useDappContext();
@@ -186,7 +190,31 @@ const Proposals = () => {
             </Heading>
             <Status status={proposal.status} />
           </Box>
-          <FieldDetails field={proposal.field} />
+          {isField(proposal.field) && <FieldDetails field={proposal.field} />}
+          <Box mt={3}>
+            <Heading as="h2" size="s">
+              History
+            </Heading>
+            <Text fontSize="xs">
+              Created: {new Date(proposal.createdDate * 1000).toISOString()}
+            </Text>
+            {proposal.openDate && (
+              <Text fontSize="xs">
+                Open: {new Date(proposal.openDate * 1000).toISOString()}
+              </Text>
+            )}
+            {proposal.abandonedDate && (
+              <Text fontSize="xs">
+                Abandoned:
+                {new Date(proposal.abandonedDate * 1000).toISOString()}
+              </Text>
+            )}
+            {proposal.approvedDate && (
+              <Text fontSize="xs">
+                Approved: {new Date(proposal.approvedDate * 1000).toISOString()}
+              </Text>
+            )}
+          </Box>
           {[`editor`, `contributor`].includes(user.role) && (
             <Box my={3}>
               <Heading as="h2" size="md" mb={3}>
