@@ -1,5 +1,5 @@
 import { ChangeEvent, useState, useRef } from 'react';
-import { Proposal, ProposalStatus, Field, FieldType } from '@unitedao/unite';
+import { Proposal, ProposalStatus, Field } from '@unitedao/unite';
 import { Text, Box, HStack, Spacer } from '@chakra-ui/react';
 import { Heading, Input, Button, ButtonGroup } from '@chakra-ui/react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
@@ -35,7 +35,7 @@ const Proposals = () => {
     {} as FormProposal,
   );
   const toast = useToast();
-  const ver = useRef();
+  const ver = useRef<HTMLSelectElement>(null);
 
   const handleChange = (
     evt: ChangeEvent<{
@@ -63,7 +63,9 @@ const Proposals = () => {
 
   const updateStatus = async (status: ProposalStatus) => {
     const version =
-      ver.current?.value && status === `approved` ? ver.current?.value : ``;
+      ver.current?.value && status === `approved`
+        ? ver.current?.value
+        : undefined;
     await standard.updateProposal(index, status, version);
     await unite.mine();
     toast({
@@ -303,7 +305,11 @@ const Proposals = () => {
           <FormLabel mt={4} fontSize="sm" htmlFor="type">
             Type
           </FormLabel>
-          <Select placeholder="Select Type" name="type" onChange={handleChange}>
+          <Select
+            placeholder="Select Type"
+            name="type"
+            onChange={() => handleChange}
+          >
             <option value="string">String</option>
             <option value="integer">Integer</option>
             <option value="number">Number</option>

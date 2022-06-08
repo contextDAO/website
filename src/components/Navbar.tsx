@@ -31,6 +31,10 @@ const Navbar = () => {
     };
   };
 
+  const logout = () => {
+    saveWallet(null);
+  };
+
   return (
     <Box>
       <Flex
@@ -69,6 +73,9 @@ const Navbar = () => {
           ) : (
             <Box>
               <Role role={user.role} />
+              <Button mr={3} onClick={logout} variant="outline" size="xs">
+                Logout
+              </Button>
             </Box>
           )}
         </Stack>

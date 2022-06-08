@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Text, Button, Box, HStack, Spacer } from '@chakra-ui/react';
 import { useDisclosure, Modal, ModalOverlay } from '@chakra-ui/react';
 import { ModalBody, ModalContent, ModalHeader } from '@chakra-ui/react';
 import { ModalCloseButton, ModalFooter } from '@chakra-ui/react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons';
+import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import { useDappContext } from '../context/dapp';
 import Avatar from './Avatar';
 import Role from './Role';
@@ -22,9 +22,9 @@ const Contributors = () => {
   const [address, setAddress] = useState(``);
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [role, setRole] = useState(``);
   const [isError, setShowErrorMsg] = useState(false);
   const toast = useToast();
+  const newRole = useRef<HTMLSelectElement>(null);
 
   const handleIncorporateDapp = async () => {
     setIsLoading(true);
@@ -40,21 +40,14 @@ const Contributors = () => {
     initStandard(standardName);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const target = e.target as HTMLSelectElement;
-    setRole(target.value);
-    console.log(target.value);
-  };
-
-  const openChangeRole = (addr: string) => {
+  const openChangeRole = (addr: string, role: string) => {
     setAddress(addr);
-    setRole(``);
     onOpen();
-    console.log(addr);
+    newRole.current.value = role;
   };
 
   const handleChangeRole = async () => {
-    console.log(role, address);
+    const role = newRole.current ? newRole.current.value : ``;
     if (role === `editor` || role === `contributor` || role === `user`) {
       setShowErrorMsg(false);
       onClose();
@@ -83,7 +76,17 @@ const Contributors = () => {
         borderBottom="1px"
         borderColor="gray.200"
       >
-        Contributors
+        <HStack>
+          <Text>Contributors</Text>
+          <Spacer />
+          <Box>
+            {user.role === `none` && (
+              <Button size="xs" w={5} h={5} onClick={handleIncorporateDapp}>
+                <AddIcon />
+              </Button>
+            )}
+          </Box>
+        </HStack>
       </Box>
       {contributors.map((contributor: Contributor, index: number) => (
         <HStack
@@ -103,7 +106,9 @@ const Contributors = () => {
             <HStack>
               {user.role === `editor` && contributor.role !== `editor` && (
                 <Button
-                  onClick={() => openChangeRole(contributor.address)}
+                  onClick={() =>
+                    openChangeRole(contributor.address, contributor.role)
+                  }
                   p={0}
                 >
                   <EditIcon />
@@ -113,18 +118,6 @@ const Contributors = () => {
           </Box>
         </HStack>
       ))}
-      {user.role === `none` && (
-        <Box>
-          <Button
-            isLoading={isLoading}
-            colorScheme="teal"
-            variant="outline"
-            onClick={handleIncorporateDapp}
-          >
-            Join this Dapp
-          </Button>
-        </Box>
-      )}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -134,7 +127,7 @@ const Contributors = () => {
             <Text fontSize="xs">{address}</Text>
             <FormControl isInvalid={isError}>
               <FormLabel htmlFor="contributor">Role</FormLabel>
-              <Select onChange={(e) => handleChange(e)}>
+              <Select ref={newRole}>
                 <option value="editor">Editor</option>
                 <option value="contributor">Contributor</option>
                 <option value="user">User</option>

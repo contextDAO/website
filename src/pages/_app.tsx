@@ -17,6 +17,10 @@ const standards: any = {
   '@collection': `G0FxYB22FeopSk6eOGw7e1L4w7A-G3WqH0yifquVi4s`,
 };
 
+function isWallet(wallet: JWKInterface | null): wallet is JWKInterface {
+  return wallet !== null;
+}
+
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [unite, setUnite] = useState({} as Unite);
   const [user, setUser] = useState({} as User);
@@ -62,10 +66,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     initContract();
   }, []);
 
-  const saveWallet = async (wallet: JWKInterface) => {
-    standard.connect(wallet);
-    const user = await getUser(wallet, unite, standardState);
-    setUser(user);
+  const saveWallet = async (wallet: JWKInterface | null) => {
+    if (isWallet(wallet)) {
+      standard.connect(wallet);
+      const user = await getUser(wallet, unite, standardState);
+      setUser(user);
+    } else {
+      setUser({} as User);
+    }
   };
 
   return (
