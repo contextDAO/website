@@ -1,10 +1,20 @@
+import { Field } from '@unitedao/unite';
 import { useDappContext } from '../context/dapp';
+import { Text, Box } from '@chakra-ui/react';
+import FieldDetails from './FieldDetails';
 
 const Schema = () => {
-  const { jsonSchema } = useDappContext();
+  const { standardState, jsonSchema } = useDappContext();
   return (
     <div>
-      <pre>{JSON.stringify(jsonSchema, null, 2)}</pre>
+      {standardState.versions[standardState.versionId].fields?.map(
+        (field: Field, index: number) => (
+          <FieldDetails field={field} key={index} />
+        ),
+      )}
+      <Box mt={3}>
+        <pre>{JSON.stringify(jsonSchema, null, 2)}</pre>
+      </Box>
     </div>
   );
 };
