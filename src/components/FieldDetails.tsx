@@ -1,4 +1,12 @@
-import { Badge, HStack, Box, Text, Spacer, Divider } from '@chakra-ui/react';
+import {
+  Badge,
+  HStack,
+  Box,
+  Text,
+  Spacer,
+  Divider,
+  Tooltip,
+} from '@chakra-ui/react';
 import { LockIcon, CheckCircleIcon } from '@chakra-ui/icons';
 import { Field } from '@unitedao/unite';
 
@@ -39,8 +47,16 @@ const FieldDetails = (props: Props) => {
         </Text>
         <Spacer />
         <Box>
-          {field.readOnly && <LockIcon color="green" w={3} h={3} mr={2} />}
-          {field.required && <CheckCircleIcon color="red" w={3} h={3} mr={2} />}
+          {field.readOnly && (
+            <Tooltip label="Read Only">
+              <LockIcon color="green" w={3} h={3} mr={2} />
+            </Tooltip>
+          )}
+          {field.required && (
+            <Tooltip label="Required">
+              <CheckCircleIcon color="red" w={3} h={3} mr={2} />
+            </Tooltip>
+          )}
           <Badge
             fontSize="0.6em"
             mx={`auto`}

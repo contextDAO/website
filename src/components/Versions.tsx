@@ -4,7 +4,6 @@ import { useDappContext } from '../context/dapp';
 
 const Versions = () => {
   const { standardState, user } = useDappContext();
-  console.log(standardState.versions);
   return (
     <div>
       <Box

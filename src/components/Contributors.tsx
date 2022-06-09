@@ -23,8 +23,9 @@ const Contributors = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isError, setShowErrorMsg] = useState(false);
+  const [role, setRole] = useState(`user`);
+
   const toast = useToast();
-  const newRole = useRef<HTMLSelectElement>(null);
 
   const handleIncorporateDapp = async () => {
     setIsLoading(true);
@@ -40,14 +41,18 @@ const Contributors = () => {
     initStandard(standardName);
   };
 
-  const openChangeRole = (addr: string, role: string) => {
-    setAddress(addr);
+  const openChangeRole = (_address: string, _role: string) => {
+    setAddress(_address);
+    setRole(_role);
     onOpen();
-    newRole.current.value = role;
+  };
+
+  const updateRole = (evt: any) => {
+    const newRole = evt.target.value;
+    setRole(newRole);
   };
 
   const handleChangeRole = async () => {
-    const role = newRole.current ? newRole.current.value : ``;
     if (role === `editor` || role === `contributor` || role === `user`) {
       setShowErrorMsg(false);
       onClose();
@@ -127,7 +132,7 @@ const Contributors = () => {
             <Text fontSize="xs">{address}</Text>
             <FormControl isInvalid={isError}>
               <FormLabel htmlFor="contributor">Role</FormLabel>
-              <Select ref={newRole}>
+              <Select value={role} onChange={(e) => updateRole(e)}>
                 <option value="editor">Editor</option>
                 <option value="contributor">Contributor</option>
                 <option value="user">User</option>
