@@ -12,9 +12,9 @@ import '@fontsource/open-sans/700.css';
 import theme from './theme';
 
 const standards: any = {
-  '@human': `BYLnMuJEJYw_g2E6b04gIYd3sUoAYeLQX-tElyA9V_w`,
-  '@organization': `IBTVjg8ci4atklZh_AnYCRaMuZwRwLx9YGMPCN7prv0`,
-  '@collection': `RyXE0BFNgCCK1OXShQCKyJr-P4rqiH7GkOSoE9Mlmis`,
+  '@human': `9CTA0Dax0WMcvG7AldDdMX3NQLRQGk1TiaXByYLwhGg`,
+  '@organization': `8Um1twqJOyR0CNpZQvczneQ1Ae7EKMsydbY2Qj0WIqU`,
+  '@collection': `-7qb5UrTH11R5WoyPmYBSIcpPbEvGJSJ5F6jp-O3qfA`,
 };
 
 function isWallet(wallet: JWKInterface | null): wallet is JWKInterface {

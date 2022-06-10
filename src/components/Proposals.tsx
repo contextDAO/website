@@ -8,6 +8,7 @@ import { useToast, Stack, Checkbox } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 import Status from './Status';
 import FieldDetails from './FieldDetails';
+import Comments from './Comments';
 
 interface FormProposal {
   proposalName: string;
@@ -137,20 +138,60 @@ const Proposals = () => {
         <HStack>
           <Text>Proposals</Text>
           <Spacer />
-          <Box>
-            {action === `list` &&
-              user.role &&
-              [`editor`, `contributor`].includes(user.role) && (
-                <Button size="xs" w={5} h={5} onClick={() => setAction(`add`)}>
-                  <AddIcon />
+          {action === `details` && (
+            <HStack>
+              {proposal.status === `open` && (
+                <Select fontSize="xs" h={6} w={32} ref={ver} mr={3}>
+                  <option>patch</option>
+                  <option>minor</option>
+                  <option>major</option>
+                </Select>
+              )}
+              {proposal.status === `proposal` && (
+                <Button
+                  mr={2}
+                  size="xs"
+                  colorScheme="blue"
+                  onClick={() => updateStatus(`open`)}
+                >
+                  Open
                 </Button>
               )}
-            {action !== `list` && (
-              <Button size="xs" w={5} h={5} onClick={() => setAction(`list`)}>
-                <CloseIcon />
+              {proposal.status === `open` && (
+                <Button
+                  size="xs"
+                  mr={2}
+                  colorScheme="green"
+                  onClick={() => updateStatus(`approved`)}
+                >
+                  Approve
+                </Button>
+              )}
+              {proposal.status !== `abandoned` &&
+                proposal.status !== `approved` && (
+                  <Button
+                    size="xs"
+                    mr={2}
+                    colorScheme="red"
+                    onClick={() => updateStatus(`abandoned`)}
+                  >
+                    Abandon
+                  </Button>
+                )}
+            </HStack>
+          )}
+          {action !== `list` && (
+            <Button size="xs" w={5} h={5} onClick={() => setAction(`list`)}>
+              <CloseIcon />
+            </Button>
+          )}
+          {action === `list` &&
+            user.role &&
+            [`editor`, `contributor`].includes(user.role) && (
+              <Button size="xs" w={5} h={5} onClick={() => setAction(`add`)}>
+                <AddIcon />
               </Button>
             )}
-          </Box>
         </HStack>
       </Box>
       {standardState.proposals?.length === 0 && (
@@ -222,42 +263,10 @@ const Proposals = () => {
               <Heading as="h2" size="md" mb={3}>
                 Actions
               </Heading>
-              <HStack>
-                {proposal.status === `open` && (
-                  <Select fontSize="xs" h={6} w={32} ref={ver}>
-                    <option>patch</option>
-                    <option>minor</option>
-                    <option>major</option>
-                  </Select>
-                )}
-                {proposal.status === `proposal` && (
-                  <Button
-                    size="xs"
-                    colorScheme="blue"
-                    onClick={() => updateStatus(`open`)}
-                  >
-                    Open
-                  </Button>
-                )}
-                {proposal.status === `open` && (
-                  <Button
-                    size="xs"
-                    colorScheme="green"
-                    onClick={() => updateStatus(`approved`)}
-                  >
-                    Approve
-                  </Button>
-                )}
-                <Button
-                  size="xs"
-                  colorScheme="red"
-                  onClick={() => updateStatus(`abandoned`)}
-                >
-                  Abandon
-                </Button>
-              </HStack>
+              <HStack></HStack>
             </Box>
           )}
+          <Comments comments={proposal.comments} />
         </Box>
       )}
       {action === `add` && (
