@@ -1,71 +1,25 @@
-import {
-  Badge,
-  HStack,
-  Box,
-  Text,
-  Spacer,
-  Divider,
-  Tooltip,
-} from '@chakra-ui/react';
-import { LockIcon, CheckCircleIcon } from '@chakra-ui/icons';
+import { HStack, Text, Divider } from '@chakra-ui/react';
 import { Field } from '@unitedao/unite';
 
 interface Props {
   field: Field;
 }
 
-const getColor = (type: string): string => {
-  let color = `gray`;
-  switch (type) {
-    case `string`:
-      color = `orange`;
-      break;
-    case `integer`:
-      color = `blue`;
-      break;
-    case `number`:
-      color = `green`;
-      break;
-    case `boolean`:
-      color = `purple`;
-      break;
-    default:
-      break;
-  }
-  return color;
-};
-
 const FieldDetails = (props: Props) => {
   const { field } = props;
+  console.log(field);
   return (
     <>
       <HStack>
         <Text>
-          <b>{field.name}</b>
+          {field.name} : {field.array}
+          {field.array === true && <>[</>}
+          {field.type}
+          {field.array === true && <>]</>}
+          {field.required === true && <>!</>}
           <br />
           {field.description}
         </Text>
-        <Spacer />
-        <Box>
-          {field.readOnly && (
-            <Tooltip label="Read Only">
-              <LockIcon color="green" w={3} h={3} mr={2} />
-            </Tooltip>
-          )}
-          {field.required && (
-            <Tooltip label="Required">
-              <CheckCircleIcon color="red" w={3} h={3} mr={2} />
-            </Tooltip>
-          )}
-          <Badge
-            fontSize="0.6em"
-            mx={`auto`}
-            colorScheme={getColor(field.type)}
-            variant="outline"
-          >
-            {field.type}
-          </Badge>
-        </Box>
       </HStack>
       <Divider />
     </>

@@ -8,15 +8,13 @@ import { useToast, Stack, Checkbox } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 import Status from './Status';
 import FieldDetails from './FieldDetails';
-import Comments from './Comments';
 
 interface FormProposal {
   proposalName: string;
-  comment: string;
   fieldName: string;
   description: string;
-  type: 'text' | 'number' | 'boolean' | 'select';
-  readOnly: boolean;
+  type: string;
+  array: boolean;
   required: boolean;
 }
 
@@ -25,7 +23,7 @@ function isField(field: Field | undefined): field is Field {
 }
 
 const Proposals = () => {
-  const { unite, standard, standardName, standardState, user, initStandard } =
+  const { unite, standard, standardName, standardState, user, initSchema } =
     useDappContext();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -45,7 +43,7 @@ const Proposals = () => {
       checked: boolean;
     }>,
   ) => {
-    const value: string | boolean = [`readOnly`, `required`].includes(
+    const value: string | boolean = [`array`, `required`].includes(
       evt.currentTarget.name,
     )
       ? evt.currentTarget.checked
@@ -77,7 +75,7 @@ const Proposals = () => {
       isClosable: true,
     });
     standardState.proposals[index].status = status;
-    initStandard(standardName);
+    initSchema(standardName);
   };
 
   const handleAddProposal = async () => {
@@ -93,7 +91,6 @@ const Proposals = () => {
     }
     if (
       formProposal.proposalName === `` ||
-      formProposal.comment === `` ||
       formProposal.fieldName === `` ||
       formProposal.description === ``
     ) {
@@ -102,17 +99,13 @@ const Proposals = () => {
     }
     setIsError(false);
     setIsLoading(true);
-    await standard.addProposal(
-      formProposal.proposalName,
-      formProposal.comment,
-      {
-        name: formProposal.fieldName,
-        description: formProposal.description,
-        type: formProposal.type,
-        readOnly: formProposal.readOnly,
-        required: formProposal.required,
-      } as Field,
-    );
+    await standard.addProposal(formProposal.proposalName, {
+      name: formProposal.fieldName,
+      description: formProposal.description,
+      type: formProposal.type,
+      required: formProposal.required,
+      array: formProposal.array,
+    } as Field);
     await unite.mine();
     toast({
       title: `Proposal added`,
@@ -121,7 +114,7 @@ const Proposals = () => {
       duration: 4000,
       isClosable: true,
     });
-    initStandard(standardName);
+    initSchema(standardName);
     setIsLoading(false);
     setAction(`list`);
   };
@@ -138,46 +131,24 @@ const Proposals = () => {
         <HStack>
           <Text>Proposals</Text>
           <Spacer />
-          {action === `details` && (
+          {action === `details` && proposal.status === `proposal` && (
             <HStack>
-              {proposal.status === `open` && (
-                <Select fontSize="xs" h={6} w={32} ref={ver} mr={3}>
-                  <option>patch</option>
-                  <option>minor</option>
-                  <option>major</option>
-                </Select>
-              )}
-              {proposal.status === `proposal` && (
-                <Button
-                  mr={2}
-                  size="xs"
-                  colorScheme="blue"
-                  onClick={() => updateStatus(`open`)}
-                >
-                  Open
-                </Button>
-              )}
-              {proposal.status === `open` && (
-                <Button
-                  size="xs"
-                  mr={2}
-                  colorScheme="green"
-                  onClick={() => updateStatus(`approved`)}
-                >
-                  Approve
-                </Button>
-              )}
-              {proposal.status !== `abandoned` &&
-                proposal.status !== `approved` && (
-                  <Button
-                    size="xs"
-                    mr={2}
-                    colorScheme="red"
-                    onClick={() => updateStatus(`abandoned`)}
-                  >
-                    Abandon
-                  </Button>
-                )}
+              <Button
+                size="xs"
+                mr={2}
+                colorScheme="green"
+                onClick={() => updateStatus(`approved`)}
+              >
+                Approve
+              </Button>
+              <Button
+                size="xs"
+                mr={2}
+                colorScheme="red"
+                onClick={() => updateStatus(`abandoned`)}
+              >
+                Abandon
+              </Button>
             </HStack>
           )}
           {action !== `list` && (
@@ -208,7 +179,6 @@ const Proposals = () => {
           >
             <Box pl={6}>
               <Text>{proposal.name}</Text>
-              <Text fontSize="xs">{proposal.comments.length} comments</Text>
             </Box>
             <Spacer />
             <Box>
@@ -228,10 +198,10 @@ const Proposals = () => {
       {action === `details` && proposal && (
         <Box p="10">
           <Box mb={3}>
+            <Status status={proposal.status} />
             <Heading as="h2" size="md">
               {proposal.name}
             </Heading>
-            <Status status={proposal.status} />
           </Box>
           {isField(proposal.field) && <FieldDetails field={proposal.field} />}
           <Box mt={3}>
@@ -241,32 +211,13 @@ const Proposals = () => {
             <Text fontSize="xs">
               Created: {new Date(proposal.createdDate * 1000).toISOString()}
             </Text>
-            {proposal.openDate && (
+            {proposal.updatedDate && (
               <Text fontSize="xs">
-                Open: {new Date(proposal.openDate * 1000).toISOString()}
-              </Text>
-            )}
-            {proposal.abandonedDate && (
-              <Text fontSize="xs">
-                Abandoned:
-                {new Date(proposal.abandonedDate * 1000).toISOString()}
-              </Text>
-            )}
-            {proposal.approvedDate && (
-              <Text fontSize="xs">
-                Approved: {new Date(proposal.approvedDate * 1000).toISOString()}
+                Updated:
+                {new Date(proposal.updatedDate * 1000).toISOString()}
               </Text>
             )}
           </Box>
-          {[`editor`, `contributor`].includes(user.role) && (
-            <Box my={3}>
-              <Heading as="h2" size="md" mb={3}>
-                Actions
-              </Heading>
-              <HStack></HStack>
-            </Box>
-          )}
-          <Comments comments={proposal.comments} />
         </Box>
       )}
       {action === `add` && (
@@ -281,14 +232,6 @@ const Proposals = () => {
             <Input
               placeholder="Name of the proposal"
               name="proposalName"
-              onChange={handleChange}
-            />
-            <FormLabel mt={4} fontSize="sm" htmlFor="comment">
-              Proposal rationale
-            </FormLabel>
-            <Input
-              placeholder="Why do we need this field"
-              name="comment"
               onChange={handleChange}
             />
             <Heading as="h2" size="sm" mt={6}>
@@ -314,27 +257,22 @@ const Proposals = () => {
           <FormLabel mt={4} fontSize="sm" htmlFor="type">
             Type
           </FormLabel>
-          <Select
-            placeholder="Select Type"
+          <Input
+            placeholder="Type: Srting, Int, Boolean..."
             name="type"
-            onChange={() => handleChange}
-          >
-            <option value="string">String</option>
-            <option value="integer">Integer</option>
-            <option value="number">Number</option>
-            <option value="boolean">Boolean</option>
-          </Select>
+            onChange={handleChange}
+          />
           <FormLabel mt={4} fontSize="sm" htmlFor="type">
             Characteristics
           </FormLabel>
           <Stack spacing={[1, 5]} direction={[`column`, `row`]}>
             <Checkbox
-              name="readOnly"
+              name="array"
               size="sm"
               colorScheme="green"
               onChange={handleChange}
             >
-              ReadOnly
+              Array
             </Checkbox>
             <Checkbox
               name="required"

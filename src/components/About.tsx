@@ -3,36 +3,32 @@ import { Box, Text, Heading, Divider, Select } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 
 const About = () => {
-  const { standardState, initStandard } = useDappContext();
+  const { standardState, initSchema } = useDappContext();
   const selectRef = useRef<HTMLSelectElement>(null);
 
-  const updateStandard = () => {
+  const updateSchema = () => {
     if (selectRef.current !== null) {
-      initStandard(selectRef.current.value);
+      initSchema(selectRef.current.value);
     }
   };
 
   return (
     <Box>
-      <Select ref={selectRef} onChange={updateStandard}>
+      <Select ref={selectRef} onChange={updateSchema}>
         <option>@human</option>
         <option>@organization</option>
         <option>@collection</option>
       </Select>
-      <Text>{standardState.description}</Text>
       <Divider my="12px" />
       <Heading as="h2" size="md">
         Releases
       </Heading>
       <Text size="xs" color="gray.600">
-        {standardState.versions?.length} releases
+        {standardState.releases?.length} releases
       </Text>
-      <Text mt="16px">
-        current version :&nbsp;
-        <b>
-          {standardState.major}.{standardState.minor}.{standardState.patch}
-        </b>
-      </Text>
+      {standardState.releaseId > -1 && (
+        <Text mt="16px">current release: {standardState.releaseId}</Text>
+      )}
       <Divider my="12px" />
       <Heading as="h2" size="md">
         Proposals

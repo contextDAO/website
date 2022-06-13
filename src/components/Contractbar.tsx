@@ -8,7 +8,7 @@ import Schema from './Schema';
 import Contributors from './Contributors';
 import Proposals from './Proposals';
 import About from './About';
-import Versions from './Versions';
+import Releases from './Releases';
 
 const Contractbar = () => {
   const { standardState } = useDappContext();
@@ -19,14 +19,12 @@ const Contractbar = () => {
           <Box p={6}>
             <Text textAlign={useBreakpointValue({ base: `left` })}>
               <strong>{standardState.title}</strong>
-              <br />
-              {standardState.description}
             </Text>
           </Box>
           <Box h="40px">
             <TabList pl={12}>
               <Tab>Schema</Tab>
-              <Tab>Versions</Tab>
+              <Tab>Releases</Tab>
               <Tab>Proposals</Tab>
               <Tab>Contributors</Tab>
             </TabList>
@@ -40,7 +38,7 @@ const Contractbar = () => {
                   <Schema />
                 </TabPanel>
                 <TabPanel p={0}>
-                  <Versions />
+                  <Releases />
                 </TabPanel>
                 <TabPanel p={0}>
                   <Proposals />

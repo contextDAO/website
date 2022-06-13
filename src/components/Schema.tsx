@@ -4,18 +4,16 @@ import { Box } from '@chakra-ui/react';
 import FieldDetails from './FieldDetails';
 
 const Schema = () => {
-  const { standardState, jsonSchema } = useDappContext();
+  const { standardState, definition } = useDappContext();
   return (
     <div>
-      {standardState.versionId > -1 &&
-        standardState.versions[standardState.versionId].fields?.map(
+      {standardState.releaseId > -1 &&
+        standardState.releases[standardState.releaseId].fields?.map(
           (field: Field, index: number) => (
             <FieldDetails field={field} key={index} />
           ),
         )}
-      <Box mt={3}>
-        <pre>{JSON.stringify(jsonSchema, null, 2)}</pre>
-      </Box>
+      <Box mt={3}>{definition.replace(`\n`, ``)}</Box>
     </div>
   );
 };

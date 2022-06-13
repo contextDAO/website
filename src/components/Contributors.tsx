@@ -17,7 +17,7 @@ interface Contributor {
 }
 
 const Contributors = () => {
-  const { standard, standardName, contributors, user, unite, initStandard } =
+  const { standard, standardName, contributors, user, unite, initSchema } =
     useDappContext();
   const [address, setAddress] = useState(``);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +38,7 @@ const Contributors = () => {
       position: `bottom`,
     });
     setIsLoading(false);
-    initStandard(standardName);
+    initSchema(standardName);
   };
 
   const openChangeRole = (_address: string, _role: string) => {
@@ -65,7 +65,7 @@ const Contributors = () => {
         position: `bottom`,
       });
       setIsLoading(false);
-      initStandard(standardName);
+      initSchema(standardName);
     } else {
       setShowErrorMsg(true);
       return;

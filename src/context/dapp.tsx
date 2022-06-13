@@ -1,10 +1,5 @@
 import { createContext, useContext } from 'react';
-import {
-  Unite,
-  JWKInterface,
-  Standard,
-  UniteSchemaState,
-} from '@unitedao/unite';
+import { Unite, JWKInterface, Schema, SchemaState } from '@unitedao/unite';
 
 export type User = {
   wallet: JWKInterface;
@@ -17,30 +12,30 @@ export type DappContent = {
   unite: Unite;
   user: User;
   contributors: Array<User>;
-  standard: Standard;
+  standard: Schema;
   standardName: string;
-  standardState: UniteSchemaState;
-  jsonSchema: object;
+  standardState: SchemaState;
+  definition: string;
   saveWallet: (wallet: JWKInterface) => void;
-  initStandard: (contractAddr: string, u?: Unite) => void;
+  initSchema: (contractAddr: string, u?: Unite) => void;
 };
 
 export const DappContext = createContext<DappContent>({
   unite: {} as Unite,
   user: {} as User,
   contributors: [] as User[],
-  standard: {} as Standard,
+  standard: {} as Schema,
   standardName: ``,
-  standardState: {} as UniteSchemaState,
-  jsonSchema: {},
+  standardState: {} as SchemaState,
+  definition: ``,
   saveWallet: () => {},
-  initStandard: () => {},
+  initSchema: () => {},
 });
 
 export const getUser = async (
   wallet: JWKInterface,
   unite: Unite,
-  standardState: UniteSchemaState,
+  standardState: SchemaState,
 ): Promise<User> => {
   const address = await unite.getAddress(wallet);
   const contributor = standardState.contributors.find(
@@ -57,7 +52,7 @@ export const getUser = async (
 };
 
 export const getContributors = async (
-  standardState: UniteSchemaState,
+  standardState: SchemaState,
 ): Promise<Array<User>> => {
   const contributors: Array<User> = [];
   standardState.contributors.forEach((c) => {
