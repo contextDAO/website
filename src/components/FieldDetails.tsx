@@ -21,7 +21,7 @@ const FieldDetails = (props: Props) => {
           {field.description}
         </Text>
       </HStack>
-      <Divider />
+      <Divider mb={3} />
     </>
   );
 };

@@ -26,7 +26,6 @@ const Versions = () => {
           <Text fontSize="xs">#{index}</Text>
           <Spacer />
           <Text fontSize="xs">#{release.fields.length} fields</Text>
-          <Text fontSize="xs">Date UPDATED (TODO)</Text>
         </HStack>
       ))}
     </div>

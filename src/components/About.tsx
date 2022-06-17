@@ -15,9 +15,10 @@ const About = () => {
   return (
     <Box>
       <Select ref={selectRef} onChange={updateSchema}>
-        <option>@human</option>
-        <option>@organization</option>
-        <option>@collection</option>
+        <option>Human</option>
+        <option>Organization</option>
+        <option>NFT</option>
+        <option>Collection</option>
       </Select>
       <Divider my="12px" />
       <Heading as="h2" size="md">

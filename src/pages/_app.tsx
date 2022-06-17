@@ -12,9 +12,10 @@ import '@fontsource/open-sans/700.css';
 import theme from './theme';
 
 const standards: any = {
-  '@human': `Hal_yR24e5U7FIFzlv4km7Dmnwz_cn0OVH0nGFoFP24`,
-  '@organization': `jnjE0BvY92LNba5RAi1f8P-7RtK_jUQebrBPPtqC3Cc`,
-  '@collection': `KfCI3f8lmC_asRpmoW7_HOi3dw3SACSqlfHrlckKwjM`,
+  Human: `jUeiklSqx8Mdp0mnDoswgMbeIbWS5DPKwyQUXpLPDLE`,
+  Organization: `2veOsivaFqSvnEzrfI02UTC5ehOVQFRH7y4vhL_uhNI`,
+  NFT: `W4rQYV64iQjZzrKoAWz5Q0F60ieojWJq-C05vzk6QAo`,
+  Collection: `FVXP4EEDhsWQbwvHKeOUwpx0Ew0Aih7DPlxD21b7ZpE`,
 };
 
 function isWallet(wallet: JWKInterface | null): wallet is JWKInterface {
@@ -59,7 +60,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const initContract = async () => {
     const u = await Unite.init(`localhost`);
     setUnite(u);
-    await initSchema(`@human`, u);
+    await initSchema(`Human`, u);
   };
 
   useEffect(() => {
