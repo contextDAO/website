@@ -1,50 +1,47 @@
 import { createContext, useContext } from 'react';
-import { Unite, JWKInterface, Schema, SchemaState } from '@unitedao/unite';
+import {
+  initContext,
+  DappContext,
+  Wallet,
+  SchemaState,
+} from '@contextdao/context';
 
 export type User = {
-  wallet: JWKInterface;
   address: string;
   role: string;
   img: string;
 };
 
 export type DappContent = {
-  unite: Unite;
+  dapp: DappContext;
   user: User;
   contributors: Array<User>;
-  standard: Schema;
-  standardName: string;
-  standardState: SchemaState;
+  schemaId: string;
   definition: string;
-  saveWallet: (wallet: JWKInterface) => void;
-  initSchema: (contractAddr: string, u?: Unite) => void;
+  saveWallet: (wallet: Wallet) => void;
+  initSchema: (contractAddr: string, u?: DappContext) => void;
 };
 
-export const DappContext = createContext<DappContent>({
-  unite: {} as Unite,
+export const Context = createContext<DappContent>({
+  dapp: {} as DappContext,
   user: {} as User,
   contributors: [] as User[],
-  standard: {} as Schema,
-  standardName: ``,
-  standardState: {} as SchemaState,
+  schemaId: ``,
   definition: ``,
   saveWallet: () => {},
   initSchema: () => {},
 });
 
 export const getUser = async (
-  wallet: JWKInterface,
-  unite: Unite,
+  wallet: Wallet,
   standardState: SchemaState,
 ): Promise<User> => {
-  const address = await unite.getAddress(wallet);
   const contributor = standardState.contributors.find(
-    (e) => e.address === address,
+    (s: any) => s.address === wallet.address,
   );
   const role: string = contributor ? contributor.role : `none`;
   const user: User = {
-    wallet,
-    address,
+    address: wallet.address,
     role,
     img: ``,
   };
@@ -52,12 +49,11 @@ export const getUser = async (
 };
 
 export const getContributors = async (
-  standardState: SchemaState,
+  schemaState: SchemaState,
 ): Promise<Array<User>> => {
   const contributors: Array<User> = [];
-  standardState.contributors.forEach((c) => {
+  schemaState.contributors.forEach((c: any) => {
     const contributor: User = {
-      wallet: {} as JWKInterface,
       address: c.address,
       role: c.role,
       img: ``,
@@ -67,4 +63,4 @@ export const getContributors = async (
   return contributors;
 };
 
-export const useDappContext = () => useContext(DappContext);
+export const useDappContext = () => useContext(Context);
