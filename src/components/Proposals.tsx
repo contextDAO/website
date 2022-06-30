@@ -1,8 +1,15 @@
-import { ChangeEvent, useState, useRef } from 'react';
-import { Proposal, ProposalStatus, Field } from '@contextdao/context';
+import { ChangeEvent, useState } from 'react';
+import {
+  Proposal,
+  ProposalStatus,
+  addProposal,
+  editProposal,
+  Field,
+  mineBlock,
+} from '@contextdao/context';
 import { Text, Box, HStack, Spacer } from '@chakra-ui/react';
 import { Heading, Input, Button, ButtonGroup } from '@chakra-ui/react';
-import { Select, FormControl, FormLabel } from '@chakra-ui/react';
+import { FormControl, FormLabel } from '@chakra-ui/react';
 import { AddIcon, CloseIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import { useToast, Stack, Checkbox } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
@@ -33,7 +40,6 @@ const Proposals = () => {
     {} as FormProposal,
   );
   const toast = useToast();
-  const ver = useRef<HTMLSelectElement>(null);
 
   const handleChange = (
     evt: ChangeEvent<{
@@ -60,13 +66,9 @@ const Proposals = () => {
   };
 
   const updateStatus = async (status: ProposalStatus) => {
-    /*
-    const version =
-      ver.current?.value && status === `approved`
-        ? ver.current?.value
-        : undefined;
-    await standard.updateProposal(index, status, version);
-    await unite.mine();
+    await editProposal(dapp, schemaState.schemaId, index, status);
+    await mineBlock(dapp.arweave);
+
     toast({
       title: `Proposal status updated`,
       description: `Proposal #${index} has now the status: ${status}`,
@@ -75,8 +77,7 @@ const Proposals = () => {
       isClosable: true,
     });
     schemaState.proposals[index].status = status;
-    initSchema(standardName);
-     */
+    initSchema(schemaState.schemaId);
   };
 
   const handleAddProposal = async () => {
@@ -100,15 +101,20 @@ const Proposals = () => {
     }
     setIsError(false);
     setIsLoading(true);
-    /*
-    await standard.addProposal(formProposal.proposalName, {
+    const field: Field = {
       name: formProposal.fieldName,
       description: formProposal.description,
       type: formProposal.type,
       required: formProposal.required,
       array: formProposal.array,
-    } as Field);
-    await unite.mine();
+    };
+    await addProposal(
+      dapp,
+      schemaState.schemaId,
+      formProposal.fieldName,
+      field,
+    );
+    await mineBlock(dapp.arweave);
     toast({
       title: `Proposal added`,
       description: `A new proposal has been added to the contract`,
@@ -116,10 +122,9 @@ const Proposals = () => {
       duration: 4000,
       isClosable: true,
     });
-    initSchema(standardName);
+    initSchema(schemaState.schemaId);
     setIsLoading(false);
     setAction(`list`);
-     */
   };
 
   return (
@@ -168,7 +173,9 @@ const Proposals = () => {
             )}
         </HStack>
       </Box>
-      {schemaState.proposals?.length === 0 && <Text m={12}>No Proposals</Text>}
+      {schemaState.proposals?.length === 0 && action === `list` && (
+        <Text m={12}>No Proposals</Text>
+      )}
       {action === `list` &&
         schemaState.proposals?.map((proposal: any, index: number) => (
           <HStack

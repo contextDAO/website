@@ -49,7 +49,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const initContract = async () => {
     const dapp = await initContext({
       network: `localhost`,
-      address: `tSh-nyJeul4wQP3OWy5wHuS2h-axkiL5Kwa9cdD9NAo`,
+      address: `1vTh9pbT50Y4r4gsqDlRPn6LW5KgA20vfZq9N5nqAgs`,
     });
     setDapp(dapp);
     initSchema(`Human`, dapp);

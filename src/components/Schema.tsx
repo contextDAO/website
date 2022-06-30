@@ -13,9 +13,6 @@ const Schema = () => {
             <FieldDetails field={field} key={index} />
           ),
         )}
-      <Box mt={3} backgroundColor="teal" color="white" p={3}>
-        <div style={{ whiteSpace: `pre-wrap` }}>definition</div>
-      </Box>
     </div>
   );
 };

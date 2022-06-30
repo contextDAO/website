@@ -1,5 +1,6 @@
 import { HStack, Text, Divider } from '@chakra-ui/react';
 import { Field } from '@contextdao/context';
+import styles from '@/styles/FieldDetails.module.css';
 
 interface Props {
   field: Field;
@@ -11,13 +12,13 @@ const FieldDetails = (props: Props) => {
     <>
       <HStack>
         <Text>
-          {field.name} : {field.array}
+          <span className={styles.label}>{field.name}</span> : {field.array}
           {field.array === true && <>[</>}
           {field.type}
           {field.array === true && <>]</>}
           {field.required === true && <>!</>}
           <br />
-          {field.description}
+          <span className={styles.description}>{field.description}</span>
         </Text>
       </HStack>
       <Divider mb={3} />

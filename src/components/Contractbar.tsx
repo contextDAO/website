@@ -24,7 +24,6 @@ const Contractbar = () => {
           <Box h="40px">
             <TabList pl={12}>
               <Tab>Schema</Tab>
-              <Tab>Releases</Tab>
               <Tab>Proposals</Tab>
               <Tab>Contributors</Tab>
             </TabList>
@@ -36,9 +35,6 @@ const Contractbar = () => {
               <TabPanels m={0}>
                 <TabPanel>
                   <Schema />
-                </TabPanel>
-                <TabPanel p={0}>
-                  <Releases />
                 </TabPanel>
                 <TabPanel p={0}>
                   <Proposals />

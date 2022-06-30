@@ -48,9 +48,7 @@ const Navbar = () => {
       >
         <Flex flex={{ base: 1 }} justify={{ base: `center`, md: `start` }}>
           <Text textAlign={useBreakpointValue({ base: `center` })}>
-            <b>Context</b>
-            <br />
-            schemas
+            Data with <b>Context</b>
           </Text>
         </Flex>
         <Stack flex={{ base: 1, md: 0 }} justify={`flex-end`} direction={`row`}>
