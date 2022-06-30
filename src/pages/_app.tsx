@@ -2,75 +2,71 @@ import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import Layout from '../components/Layout';
-import { DappContext, User, getUser, getContributors } from '../context/dapp';
-import { Unite, Schema } from '@unitedao/unite';
-import { JWKInterface, SchemaState } from '@unitedao/unite';
+import { Context, User, getUser, getContributors } from '../context/dapp';
+import {
+  SchemaState,
+  initContext,
+  Wallet,
+  DappContext,
+  getSchemaState,
+  connectWallet,
+} from '@contextdao/context';
 
 import '@/styles/global.css';
 import '@fontsource/raleway/400.css';
 import '@fontsource/open-sans/700.css';
 import theme from './theme';
 
-const standards: any = {
-  Human: `jUeiklSqx8Mdp0mnDoswgMbeIbWS5DPKwyQUXpLPDLE`,
-  Organization: `2veOsivaFqSvnEzrfI02UTC5ehOVQFRH7y4vhL_uhNI`,
-  NFT: `W4rQYV64iQjZzrKoAWz5Q0F60ieojWJq-C05vzk6QAo`,
-  Collection: `FVXP4EEDhsWQbwvHKeOUwpx0Ew0Aih7DPlxD21b7ZpE`,
-};
-
-function isWallet(wallet: JWKInterface | null): wallet is JWKInterface {
-  return wallet !== null;
+function isWallet(wallet: Wallet | null): wallet is Wallet {
+  return wallet !== null && wallet.json !== null;
 }
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [unite, setUnite] = useState({} as Unite);
+  const [firstTime, setFirstTime] = useState(true);
+  const [dapp, setDapp] = useState({} as DappContext);
   const [user, setUser] = useState({} as User);
   const [contributors, setContributors] = useState([] as User[]);
-  const [definition, setDefinition] = useState(``);
-  const [standardName, setSetandardName] = useState(``);
-  const [standard, setSetandard] = useState<Schema>({} as Schema);
-  const [standardState, setSetandardState] = useState<SchemaState>(
+  const [schemaState, setSetandardState] = useState<SchemaState>(
     {} as SchemaState,
   );
 
-  const initSchema = async (standardName: string, u: Unite = unite) => {
-    const contractAddr = standards[standardName];
-    let standard;
-    if (u) {
-      standard = await u.getSchema(contractAddr);
-    } else {
-      standard = await unite.getSchema(contractAddr);
-    }
-    const standardState: SchemaState = await standard.readState();
-    setSetandard(standard);
-    setSetandardName(standardName);
-    setSetandardState(standardState);
-    const definition = await u.getDefinition(standardState);
-    setDefinition(definition);
-    const contributors = await getContributors(standardState);
-    setContributors(contributors);
+  const initSchema = async (schemaId: string, d: DappContext = dapp) => {
+    // Init Schema State
+    const schemaState = await getSchemaState(d, schemaId);
+    setSetandardState(schemaState);
 
+    const contributors = await getContributors(schemaState);
+    setContributors(contributors);
+    /*
     if (user.wallet) {
       standard.connect(user.wallet);
-      const reloadUser = await getUser(user.wallet, unite, standardState);
+      const reloadUser = await getUser(user.wallet, unite, schemaState);
       setUser(reloadUser);
     }
+     */
   };
 
   const initContract = async () => {
-    const u = await Unite.init(`localhost`);
-    setUnite(u);
-    await initSchema(`Human`, u);
+    const dapp = await initContext({
+      network: `localhost`,
+      address: `tSh-nyJeul4wQP3OWy5wHuS2h-axkiL5Kwa9cdD9NAo`,
+    });
+    setDapp(dapp);
+    initSchema(`Human`, dapp);
   };
 
   useEffect(() => {
-    initContract();
+    if (firstTime) {
+      initContract();
+      setFirstTime(false);
+    }
   }, []);
 
-  const saveWallet = async (wallet: JWKInterface | null) => {
+  const saveWallet = async (wallet: Wallet | null) => {
     if (isWallet(wallet)) {
-      standard.connect(wallet);
-      const user = await getUser(wallet, unite, standardState);
+      await connectWallet(dapp, wallet.json);
+      setDapp(dapp);
+      const user = await getUser(wallet, schemaState);
       setUser(user);
     } else {
       setUser({} as User);
@@ -79,23 +75,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider theme={theme}>
-      <DappContext.Provider
+      <Context.Provider
         value={{
-          unite,
+          dapp,
           user,
           contributors,
-          standard,
-          standardName,
-          standardState,
-          definition,
-          saveWallet,
+          schemaState,
           initSchema,
+          saveWallet,
         }}
       >
         <Layout>
           <Component {...pageProps} />;
         </Layout>
-      </DappContext.Provider>
+      </Context.Provider>
     </ChakraProvider>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Text, Button, Box, HStack, Spacer } from '@chakra-ui/react';
 import { useDisclosure, Modal, ModalOverlay } from '@chakra-ui/react';
 import { ModalBody, ModalContent, ModalHeader } from '@chakra-ui/react';
@@ -7,6 +7,11 @@ import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import { useDappContext } from '../context/dapp';
+import {
+  addContributor,
+  editContributor,
+  mineBlock,
+} from '@contextdao/context';
 import Avatar from './Avatar';
 import Role from './Role';
 
@@ -17,7 +22,7 @@ interface Contributor {
 }
 
 const Contributors = () => {
-  const { standard, standardName, contributors, user, unite, initSchema } =
+  const { contributors, user, dapp, initSchema, schemaState } =
     useDappContext();
   const [address, setAddress] = useState(``);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,8 +34,10 @@ const Contributors = () => {
 
   const handleIncorporateDapp = async () => {
     setIsLoading(true);
-    await standard.register(user.wallet);
-    await unite.mine();
+
+    console.log(dapp);
+    await addContributor(dapp, schemaState.schemaId);
+    await mineBlock(dapp.arweave);
     toast({
       title: `User registered`,
       description: `Your wallet has been registered as a user in the standard`,
@@ -38,7 +45,7 @@ const Contributors = () => {
       position: `bottom`,
     });
     setIsLoading(false);
-    initSchema(standardName);
+    initSchema(schemaState.schemaId);
   };
 
   const openChangeRole = (_address: string, _role: string) => {
@@ -56,8 +63,8 @@ const Contributors = () => {
     if (role === `editor` || role === `contributor` || role === `user`) {
       setShowErrorMsg(false);
       onClose();
-      await standard.setRole(role, address);
-      await unite.mine();
+      await editContributor(dapp, schemaState.schemaId, address, role);
+      await mineBlock(dapp.arweave);
       toast({
         title: `User updated`,
         description: `User with address ${address} now has role ${role}`,
@@ -65,7 +72,7 @@ const Contributors = () => {
         position: `bottom`,
       });
       setIsLoading(false);
-      initSchema(standardName);
+      initSchema(schemaState.schemaId);
     } else {
       setShowErrorMsg(true);
       return;

@@ -1,10 +1,5 @@
 import { createContext, useContext } from 'react';
-import {
-  initContext,
-  DappContext,
-  Wallet,
-  SchemaState,
-} from '@contextdao/context';
+import { DappContext, Wallet, SchemaState } from '@contextdao/context';
 
 export type User = {
   address: string;
@@ -16,9 +11,8 @@ export type DappContent = {
   dapp: DappContext;
   user: User;
   contributors: Array<User>;
-  schemaId: string;
-  definition: string;
-  saveWallet: (wallet: Wallet) => void;
+  schemaState: SchemaState;
+  saveWallet: (wallet: Wallet | null) => void;
   initSchema: (contractAddr: string, u?: DappContext) => void;
 };
 
@@ -26,8 +20,7 @@ export const Context = createContext<DappContent>({
   dapp: {} as DappContext,
   user: {} as User,
   contributors: [] as User[],
-  schemaId: ``,
-  definition: ``,
+  schemaState: {} as SchemaState,
   saveWallet: () => {},
   initSchema: () => {},
 });

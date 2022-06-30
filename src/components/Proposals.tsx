@@ -1,5 +1,5 @@
 import { ChangeEvent, useState, useRef } from 'react';
-import { Proposal, ProposalStatus, Field } from '@unitedao/unite';
+import { Proposal, ProposalStatus, Field } from '@contextdao/context';
 import { Text, Box, HStack, Spacer } from '@chakra-ui/react';
 import { Heading, Input, Button, ButtonGroup } from '@chakra-ui/react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
@@ -23,8 +23,7 @@ function isField(field: Field | undefined): field is Field {
 }
 
 const Proposals = () => {
-  const { unite, standard, standardName, standardState, user, initSchema } =
-    useDappContext();
+  const { dapp, schemaState, user, initSchema } = useDappContext();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [action, setAction] = useState(`list`);
@@ -56,11 +55,12 @@ const Proposals = () => {
 
   const detailsProposal = (index: number) => {
     setIndex(index);
-    setProposal(standardState.proposals[index]);
+    setProposal(schemaState.proposals[index]);
     setAction(`details`);
   };
 
   const updateStatus = async (status: ProposalStatus) => {
+    /*
     const version =
       ver.current?.value && status === `approved`
         ? ver.current?.value
@@ -74,8 +74,9 @@ const Proposals = () => {
       duration: 4000,
       isClosable: true,
     });
-    standardState.proposals[index].status = status;
+    schemaState.proposals[index].status = status;
     initSchema(standardName);
+     */
   };
 
   const handleAddProposal = async () => {
@@ -99,6 +100,7 @@ const Proposals = () => {
     }
     setIsError(false);
     setIsLoading(true);
+    /*
     await standard.addProposal(formProposal.proposalName, {
       name: formProposal.fieldName,
       description: formProposal.description,
@@ -117,6 +119,7 @@ const Proposals = () => {
     initSchema(standardName);
     setIsLoading(false);
     setAction(`list`);
+     */
   };
 
   return (
@@ -165,11 +168,9 @@ const Proposals = () => {
             )}
         </HStack>
       </Box>
-      {standardState.proposals?.length === 0 && (
-        <Text m={12}>No Proposals</Text>
-      )}
+      {schemaState.proposals?.length === 0 && <Text m={12}>No Proposals</Text>}
       {action === `list` &&
-        standardState.proposals?.map((proposal: any, index: number) => (
+        schemaState.proposals?.map((proposal: any, index: number) => (
           <HStack
             key={index}
             spacing="24px"

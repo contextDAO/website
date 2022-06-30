@@ -11,14 +11,14 @@ import About from './About';
 import Releases from './Releases';
 
 const Contractbar = () => {
-  const { standardState } = useDappContext();
+  const { schemaState } = useDappContext();
   return (
     <Box>
       <Tabs w="100%">
         <VStack align="stretch" bg="#F6F8FA">
           <Box p={6}>
             <Text textAlign={useBreakpointValue({ base: `left` })}>
-              <strong>{standardState.title}</strong>
+              <strong>{schemaState.schemaId}</strong>
             </Text>
           </Box>
           <Box h="40px">

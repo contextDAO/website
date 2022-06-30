@@ -3,7 +3,7 @@ import { Box, Text, Heading, Divider, Select } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 
 const About = () => {
-  const { standardState, initSchema } = useDappContext();
+  const { schemaState, initSchema } = useDappContext();
   const selectRef = useRef<HTMLSelectElement>(null);
 
   const updateSchema = () => {
@@ -25,17 +25,17 @@ const About = () => {
         Releases
       </Heading>
       <Text size="xs" color="gray.600">
-        {standardState.releases?.length} releases
+        {schemaState.releases?.length} releases
       </Text>
-      {standardState.releaseId > -1 && (
-        <Text mt="16px">current release: {standardState.releaseId}</Text>
+      {schemaState.releaseId > -1 && (
+        <Text mt="16px">current release: {schemaState.releaseId}</Text>
       )}
       <Divider my="12px" />
       <Heading as="h2" size="md">
         Proposals
       </Heading>
       <Text size="xs" color="gray.600">
-        {standardState.proposals?.length} proposals
+        {schemaState.proposals?.length} proposals
       </Text>
     </Box>
   );

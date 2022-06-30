@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useColorModeValue, useBreakpointValue } from '@chakra-ui/react';
 import { Text, Button, InputGroup, Input } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
@@ -8,26 +7,25 @@ import { useDisclosure } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent } from '@chakra-ui/react';
 import { ModalHeader, ModalBody, ModalFooter } from '@chakra-ui/react';
 import { ModalCloseButton } from '@chakra-ui/react';
-import { JWKInterface } from '@unitedao/unite';
+import { JWKInterface, Wallet } from '@contextdao/context';
 import Role from './Role';
-import Avatar from './Avatar';
 
 const Navbar = () => {
-  const { unite, saveWallet, user } = useDappContext();
+  const { dapp, saveWallet, user } = useDappContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [balance, setBalance] = useState(0);
   const handleNewFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileReader = new FileReader();
     const target = e.target as HTMLInputElement;
     const file: File = (target.files as FileList)[0];
     fileReader.readAsText(file, `UTF-8`);
     fileReader.onload = async (readerEvt: any) => {
-      const wallet = JSON.parse(readerEvt.currentTarget.result);
-      const addr: string = await unite.arweave.wallets.getAddress(wallet);
-      // const balance = await unite.arweave.wallets.getBalance(addr);
-      // const ar = await unite.arweave.ar.winstonToAr(balance);
-      // setBalance(parseFloat(ar));
-      saveWallet(wallet as JWKInterface);
+      const json: JWKInterface = JSON.parse(readerEvt.currentTarget.result);
+      const wallet: Wallet = {
+        json,
+        address: await dapp.arweave.wallets.getAddress(json),
+      };
+      saveWallet(wallet);
+      onClose();
     };
   };
 
@@ -38,7 +36,7 @@ const Navbar = () => {
   return (
     <Box>
       <Flex
-        bg="#24292F"
+        bg="#345AD5"
         color="#FFF"
         minH={`60px`}
         py={{ base: 2 }}
@@ -50,7 +48,7 @@ const Navbar = () => {
       >
         <Flex flex={{ base: 1 }} justify={{ base: `center`, md: `start` }}>
           <Text textAlign={useBreakpointValue({ base: `center` })}>
-            <b>Unite DAO</b>
+            <b>Context</b>
             <br />
             schemas
           </Text>
@@ -63,9 +61,10 @@ const Navbar = () => {
               fontSize={`sm`}
               fontWeight={600}
               color={`white`}
-              bg={`pink.400`}
+              bg="#42D5DD"
               _hover={{
-                bg: `pink.300`,
+                bg: `white`,
+                color: `gray`,
               }}
             >
               Connect Wallet
@@ -101,7 +100,6 @@ const Navbar = () => {
                 <div>
                   <Stat>
                     <StatLabel>Wallet</StatLabel>
-                    <StatNumber>{balance} AR</StatNumber>
                     <StatHelpText fontSize="xs">{user.address}</StatHelpText>
                   </Stat>
                   <Role role={user.role} />

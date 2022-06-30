@@ -2,7 +2,7 @@ import { Text, Box, HStack, Spacer } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 
 const Versions = () => {
-  const { standardState } = useDappContext();
+  const { schemaState } = useDappContext();
   return (
     <div>
       <Box
@@ -14,8 +14,8 @@ const Versions = () => {
       >
         Releases
       </Box>
-      {standardState.releases?.length === 0 && <Text m={12}>No releases</Text>}
-      {standardState.releases?.map((release: any, index: number) => (
+      {schemaState.releases?.length === 0 && <Text m={12}>No releases</Text>}
+      {schemaState.releases?.map((release: any, index: number) => (
         <HStack
           key={index}
           spacing="24px"

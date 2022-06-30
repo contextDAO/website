@@ -1,5 +1,5 @@
 import { HStack, Text, Divider } from '@chakra-ui/react';
-import { Field } from '@unitedao/unite';
+import { Field } from '@contextdao/context';
 
 interface Props {
   field: Field;
@@ -7,7 +7,6 @@ interface Props {
 
 const FieldDetails = (props: Props) => {
   const { field } = props;
-  console.log(field);
   return (
     <>
       <HStack>
