@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
-import Layout from '../components/Layout';
 import { Context, User, getUser, getContributors } from '../context/dapp';
 import {
   SchemaState,
@@ -16,6 +15,13 @@ import '@/styles/global.css';
 import '@fontsource/raleway/400.css';
 import '@fontsource/open-sans/700.css';
 import theme from './theme';
+
+import LayoutWeb from '../components/LayoutWeb';
+import LayoutDapp from '../components/LayoutDapp';
+const layouts = {
+  LayoutWeb: LayoutWeb,
+  LayoutDapp: LayoutDapp,
+};
 
 function isWallet(wallet: Wallet | null): wallet is Wallet {
   return wallet !== null && wallet.json !== null;
@@ -48,8 +54,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const initContract = async () => {
     const dapp = await initContext({
-      network: `testnet`,
-      address: `ITyiz5aoWj7njnz3kC3LJb0DfdjrTp9sa8oq-G0t5IM`,
+      network: `localhost`,
+      address: `CtTKTcwZeaO8lK0I0GECQwd6H2ALH6u5zKYIAiY9SgI`,
     });
     setDapp(dapp);
     initSchema(`Human`, dapp);
@@ -73,6 +79,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }
   };
 
+  const Layout =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    layouts[Component.layout] || ((children: any) => <>{children}</>);
   return (
     <ChakraProvider theme={theme}>
       <Context.Provider

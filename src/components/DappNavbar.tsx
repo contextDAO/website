@@ -10,7 +10,7 @@ import { ModalCloseButton } from '@chakra-ui/react';
 import { JWKInterface, Wallet } from '@contextdao/context';
 import Role from './Role';
 
-const Navbar = () => {
+const DappNavbar = () => {
   const { dapp, saveWallet, user } = useDappContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleNewFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +51,7 @@ const Navbar = () => {
             Data with <b>Context</b>
           </Text>
         </Flex>
+
         <Stack flex={{ base: 1, md: 0 }} justify={`flex-end`} direction={`row`}>
           {!user.address ? (
             <Button
@@ -77,6 +78,7 @@ const Navbar = () => {
           )}
         </Stack>
       </Flex>
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -116,4 +118,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default DappNavbar;

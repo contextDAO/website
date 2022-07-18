@@ -10,7 +10,7 @@ import Proposals from './Proposals';
 import About from './About';
 import Releases from './Releases';
 
-const Contractbar = () => {
+const ContractBar = () => {
   const { schemaState } = useDappContext();
   return (
     <Box>
@@ -54,4 +54,4 @@ const Contractbar = () => {
   );
 };
 
-export default Contractbar;
+export default ContractBar;
