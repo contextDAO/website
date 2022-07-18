@@ -36,7 +36,7 @@ const DappNavbar = () => {
                 color: `gray`,
               }}
             >
-              GO TO APP
+              Launch APP
             </Button>
           </Link>
         </Stack>

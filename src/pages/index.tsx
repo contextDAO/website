@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
+import HomeSection from '@/components/HomeSection';
 
 function Home() {
   return (
@@ -12,6 +13,7 @@ function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <HomeSection />
     </div>
   );
 }
