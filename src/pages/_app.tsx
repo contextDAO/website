@@ -28,8 +28,9 @@ function isWallet(wallet: Wallet | null): wallet is Wallet {
   return wallet !== null && wallet.json !== null;
 }
 
+let firstTime = true;
+
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [firstTime, setFirstTime] = useState(true);
   const [dapp, setDapp] = useState({} as DappContext);
   const [user, setUser] = useState({} as User);
   const [contributors, setContributors] = useState([] as User[]);
@@ -39,7 +40,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const initSchema = async (schemaId: string, d: DappContext = dapp) => {
     // Init Schema State
+    console.log(d);
     const schemaState = await getSchemaState(d, schemaId);
+    console.log(schemaState);
     setSetandardState(schemaState);
 
     const contributors = await getContributors(schemaState);
@@ -54,19 +57,24 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   };
 
   const initContract = async () => {
+    console.log(`initContract`);
     const dapp = await initContext({
       network: `testnet`,
       address: `lKw1ihNCLy-lTh3-RwXelV7-sWGGpRPKpF2mjpBCqNo`,
     });
     setDapp(dapp);
-    initSchema(`Human`, dapp);
+    await initSchema(`Human`, dapp);
   };
 
   useEffect(() => {
+    console.log(`useEffect ${firstTime}`);
     if (firstTime) {
       initContract();
-      setFirstTime(false);
     }
+    return () => {
+      firstTime = false;
+      console.log(`Cleanup..`);
+    };
   }, []);
 
   const saveWallet = async (wallet: Wallet | null) => {
