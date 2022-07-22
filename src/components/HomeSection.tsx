@@ -1,16 +1,21 @@
-import { useColorModeValue, useBreakpointValue } from '@chakra-ui/react';
-import { Text } from '@chakra-ui/react';
-import { Flex, Box, Stack } from '@chakra-ui/react';
-import { Button, ButtonGroup } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Box } from '@chakra-ui/react';
 import Intro from './Intro';
+import Info from './Info';
 
 const HomeSection = () => {
   return (
     <Box>
       <Intro />
-      {/*<Info/>*/}
-      {/*<Roadmap/>*/}
+      <Info />
+      <Info />
+      <Intro />
+      <Info />
+      <Intro />
+      {/*<Problem />*/}
+      {/*<Scenario />*/}
+      {/*<Solution />*/}
+      {/*<Tokenomics />*/}
+      {/*<Roadmap />*/}
     </Box>
   );
 };

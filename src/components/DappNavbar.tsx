@@ -1,4 +1,9 @@
-import { useColorModeValue, useBreakpointValue } from '@chakra-ui/react';
+import {
+  useColorModeValue,
+  useBreakpointValue,
+  GridItem,
+  SimpleGrid,
+} from '@chakra-ui/react';
 import { Text, Button, InputGroup, Input } from '@chakra-ui/react';
 import { useDappContext } from '../context/dapp';
 import { Flex, Box, Stack } from '@chakra-ui/react';
@@ -9,6 +14,7 @@ import { ModalHeader, ModalBody, ModalFooter } from '@chakra-ui/react';
 import { ModalCloseButton } from '@chakra-ui/react';
 import { JWKInterface, Wallet } from '@contextdao/context';
 import Role from './Role';
+import Link from 'next/link';
 
 const DappNavbar = () => {
   const { dapp, saveWallet, user } = useDappContext();
@@ -47,38 +53,62 @@ const DappNavbar = () => {
         align={`center`}
       >
         <Flex flex={{ base: 1 }} justify={{ base: `center`, md: `start` }}>
-          <Text textAlign={useBreakpointValue({ base: `center` })}>
-            Data with <b>Context</b>
-          </Text>
+          <Stack>
+            <Text textAlign={useBreakpointValue({ base: `center` })}>
+              Data with <b>Context</b>
+            </Text>
+          </Stack>
         </Flex>
 
-        <Stack flex={{ base: 1, md: 0 }} justify={`flex-end`} direction={`row`}>
-          {!user.address ? (
-            <Button
-              onClick={onOpen}
-              display={{ base: `none`, md: `inline-flex` }}
-              fontSize={`sm`}
-              fontWeight={600}
-              color={`white`}
-              bg="#42D5DD"
-              _hover={{
-                bg: `white`,
-                color: `gray`,
-              }}
+        <SimpleGrid columns={2} columnGap={3}>
+          <GridItem colSpan={1}>
+            <Stack>
+              <Link href="/">
+                <Button
+                  bg={`secondary`}
+                  color={`white`}
+                  fontSize={`sm`}
+                  fontWeight={600}
+                  _hover={{ bg: `white`, color: `gray` }}
+                >
+                  Homepage
+                </Button>
+              </Link>
+            </Stack>
+          </GridItem>
+          <GridItem>
+            <Stack
+              flex={{ base: 1, md: 0 }}
+              justify={`flex-end`}
+              direction={`row`}
             >
-              Connect Wallet
-            </Button>
-          ) : (
-            <Box>
-              <Role role={user.role} />
-              <Button mr={3} onClick={logout} variant="outline" size="xs">
-                Logout
-              </Button>
-            </Box>
-          )}
-        </Stack>
+              {!user.address ? (
+                <Button
+                  onClick={onOpen}
+                  display={{ base: `none`, md: `inline-flex` }}
+                  fontSize={`sm`}
+                  fontWeight={600}
+                  color={`white`}
+                  bg="#42D5DD"
+                  _hover={{
+                    bg: `white`,
+                    color: `gray`,
+                  }}
+                >
+                  Connect Wallet
+                </Button>
+              ) : (
+                <Box>
+                  <Role role={user.role} />
+                  <Button mr={3} onClick={logout} variant="outline" size="xs">
+                    Logout
+                  </Button>
+                </Box>
+              )}
+            </Stack>
+          </GridItem>
+        </SimpleGrid>
       </Flex>
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

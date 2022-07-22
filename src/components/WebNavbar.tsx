@@ -8,8 +8,8 @@ const DappNavbar = () => {
   return (
     <Box>
       <Flex
-        bg="#345AD5"
-        color="#FFF"
+        bg={`primary`}
+        color={`white`}
         minH={`60px`}
         py={{ base: 2 }}
         px={{ base: 4 }}
