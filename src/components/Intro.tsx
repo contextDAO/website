@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 
 export default function Intro() {
   return (
-    <Box>
+    <Box marginTop={-800}>
       <Container maxW={`4xl`}>
         <Stack
           as={Box}
@@ -42,7 +42,11 @@ export default function Intro() {
             transition={{ ease: `easeOut`, duration: 1.5 }}
           >
             <Text color={`gray.500`} marginTop={`-1.2rem`}>
-              {`Context DAO is a set of Smart Contracts on Arweave to register and store standard-based information on Web3.
+              {`Context is a framework to coordinate standards as Public Goods
+            `}
+            </Text>
+            <Text color={`primary`} fontWeight={`bold`}>
+              {`Context = SCHEMAS + DATA PODs + UNIVERSAL NAME SERVICE
             `}
             </Text>
           </motion.div>

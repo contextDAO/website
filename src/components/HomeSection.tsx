@@ -1,21 +1,21 @@
 import { Box } from '@chakra-ui/react';
 import Intro from './Intro';
 import Info from './Info';
+import Problem from '@/components/Problem';
+import Scenario from '@/components/Scenario';
+import Footer from '@/components/Footer';
 
 const HomeSection = () => {
   return (
     <Box>
       <Intro />
+      <Problem />
       <Info />
-      <Info />
-      <Intro />
-      <Info />
-      <Intro />
-      {/*<Problem />*/}
-      {/*<Scenario />*/}
+      <Scenario />
       {/*<Solution />*/}
       {/*<Tokenomics />*/}
       {/*<Roadmap />*/}
+      <Footer />
     </Box>
   );
 };

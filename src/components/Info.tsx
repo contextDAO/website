@@ -1,5 +1,5 @@
 import React from 'react';
-import { chakra, Box, SimpleGrid, Flex, Icon } from '@chakra-ui/react';
+import { chakra, Box, SimpleGrid, Icon } from '@chakra-ui/react';
 
 export default function Info() {
   const Feature = (props: {
@@ -73,13 +73,14 @@ export default function Info() {
       alignItems="center"
     >
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
+        columns={{ base: 1, md: 2, lg: 2 }}
         spacing={20}
         px={{ base: 4, lg: 16, xl: 24 }}
         py={20}
         mx="auto"
         bg="white"
         shadow="xl"
+        borderRadius={12}
       >
         <Feature
           title="Unify your payments stack"
@@ -112,6 +113,21 @@ export default function Info() {
           into your own mobile and web applications to accept in-store payments.
         </Feature>
 
+        <Feature
+          title="Grow your platform’s revenue"
+          icon={
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20"
+            />
+          }
+        >
+          Add in-person payments to your platform or marketplace. Using Terminal
+          with Connect, you can onboard users for online and in-person payments,
+          and unify their payouts across channels.
+        </Feature>
         <Feature
           title="Grow your platform’s revenue"
           icon={
