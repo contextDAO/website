@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 
 export default function Intro() {
   return (
-    <Box marginTop={-800}>
+    <Box className="intro">
       <Container maxW={`4xl`}>
         <Stack
           as={Box}
@@ -40,8 +40,9 @@ export default function Intro() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ ease: `easeOut`, duration: 1.5 }}
+            className="intro__text"
           >
-            <Text color={`gray.500`} marginTop={`-1.2rem`}>
+            <Text color={`gray.500`}>
               {`Context is a framework to coordinate standards as Public Goods
             `}
             </Text>

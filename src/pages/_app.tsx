@@ -19,6 +19,9 @@ import theme from './theme';
 
 import LayoutWeb from '../components/LayoutWeb';
 import LayoutDapp from '../components/LayoutDapp';
+import styles from '@/styles/Home.module.css';
+import Head from 'next/head';
+
 const layouts = {
   LayoutWeb: LayoutWeb,
   LayoutDapp: LayoutDapp,
@@ -104,6 +107,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           saveWallet,
         }}
       >
+        <Head>
+          <title>Context DAO - Schemas Dapp</title>
+          <meta
+            name="Context DAO - Schema manager"
+            content="Dapp to manage schemas in Context DAO"
+          />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
         <Layout>
           <Component {...pageProps} />;
         </Layout>

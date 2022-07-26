@@ -7,7 +7,10 @@ import {
   Text,
   Heading,
   SimpleGrid,
+  Image,
 } from '@chakra-ui/react';
+
+import Image1 from '/public/media/images/image1.png';
 
 const StatsText = ({ children }: { children: ReactNode }) => (
   <Text as={`span`} fontWeight={700} color={`white`}>
@@ -17,27 +20,13 @@ const StatsText = ({ children }: { children: ReactNode }) => (
 
 export default function Problem() {
   return (
-    <Box bg={`primary`} position={`relative`}>
-      <Flex
-        flex={1}
-        zIndex={0}
-        display={{ base: `none`, lg: `flex` }}
-        backgroundImage="url('/templates/stats-grid-with-image.png')"
-        backgroundSize={`cover`}
-        backgroundPosition="center"
-        backgroundRepeat="no-repeat"
-        position={`absolute`}
-        width={`50%`}
-        insetY={0}
-        right={0}
+    <Box bg={`primary`} position={`relative`} className="context__dao">
+      <Container
+        maxW={`7xl`}
+        zIndex={10}
+        position={`relative`}
+        className="space__text"
       >
-        <Flex
-          bgGradient={`linear(to-r, primary 10%, transparent)`}
-          w={`full`}
-          h={`full`}
-        />
-      </Flex>
-      <Container maxW={`7xl`} zIndex={10} position={`relative`}>
         <Stack direction={{ base: `column`, lg: `row` }}>
           <Stack
             flex={1}
@@ -84,7 +73,6 @@ export default function Problem() {
               ))}
             </SimpleGrid>
           </Stack>
-          <Flex flex={1} />
         </Stack>
       </Container>
     </Box>

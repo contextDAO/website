@@ -7,11 +7,12 @@ import Footer from '@/components/Footer';
 
 const HomeSection = () => {
   return (
-    <Box>
+    <Box className="homeSection">
       <Intro />
       <Problem />
       <Info />
-      <Scenario />
+      <Info />
+      {/*<Scenario />*/}
       {/*<Solution />*/}
       {/*<Tokenomics />*/}
       {/*<Roadmap />*/}

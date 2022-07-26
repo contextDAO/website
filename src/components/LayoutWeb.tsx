@@ -1,11 +1,12 @@
 import WebNavbar from '@/components/WebNavbar';
-import HomeSection from '@/components/HomeSection';
 
 const LayoutDapp = ({ children }: any) => {
   return (
-    <div>
-      <WebNavbar />
-      {children}
+    <div className="layoutWeb">
+      <div className="webNavbar">
+        <WebNavbar />
+      </div>
+      <div className="page">{children}</div>
     </div>
   );
 };

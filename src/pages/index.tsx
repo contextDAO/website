@@ -6,19 +6,7 @@ import { Box, Container } from '@chakra-ui/react';
 function Home() {
   return (
     <Box>
-      <div className={styles.container}>
-        <Head>
-          <title>Context DAO - Schemas Dapp</title>
-          <meta
-            name="Context DAO - Schema manager"
-            content="Dapp to manage schemas in Context DAO"
-          />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-      </div>
-      <Box marginTop={-725}>
-        <HomeSection />
-      </Box>
+      <HomeSection />
     </Box>
   );
 }
