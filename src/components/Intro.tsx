@@ -66,7 +66,7 @@ export default function Intro() {
                 as={motion.button}
                 bg={`secondary`}
                 color={`white`}
-                display={{ base: `none`, md: `inline-flex` }}
+                display={{ md: `inline-flex` }}
                 fontWeight={600}
                 whileHover={{ scale: 1.05 }}
                 dragConstraints={{ left: -100, right: 100 }}

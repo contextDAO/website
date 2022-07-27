@@ -32,7 +32,7 @@ export default function Problem() {
             flex={1}
             color={`secondary`}
             justify={{ lg: `center` }}
-            py={{ base: 4, md: 20, xl: 60 }}
+            py={{ base: 40, md: 40, xl: 60 }}
           >
             <Box mb={{ base: 8, md: 20 }} marginTop={`-100`}>
               <Heading
